@@ -12,18 +12,6 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
-  description = "Azure Region for resources"
-  type        = string
-}
-
-variable "tags" {
-  description = "Common resource tags"
-  type        = map(string)
-  default     = {}
-}
-
-
 #---------------------------
 # REDIS MODULE VARIABLES
 #---------------------------
