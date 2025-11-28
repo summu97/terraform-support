@@ -30,5 +30,5 @@ resource "azurerm_redis_cache" "this" {
   # 4. Virtual Network Integration (Premium Only)
   subnet_id = local.is_premium ? var.subnet_id : null
 
-  tags = var.tags
+  tags = var.redis_tags
 }
