@@ -11,7 +11,7 @@ resource "modtm_telemetry" "telemetry" {
   id         = random_uuid.telemetry.result
   environment = var.resource_group_name
   location   = var.location
-  tags       = var.tags
+  tags       = var.des_tags
 }
 
 # Create Disk Encryption Set
