@@ -28,15 +28,15 @@ output "cdn_profile_name" {
 # Disk Encryption Set Outputs
 # -------------------------
 output "des_key_vault_key_url" {
-  value = module.des.key_vault_key_url
+  value = module.disk_encryption_set.key_vault_key_url
 }
 
 output "des_resource" {
-  value = module.des.resource
+  value = module.disk_encryption_set.resource
 }
 
 output "des_resource_id" {
-  value = module.des.resource_id
+  value = module.disk_encryption_set.resource_id
 }
 
 # -------------------------
