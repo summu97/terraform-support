@@ -1,4 +1,6 @@
+# -------------------------
 # Redis Cache Module
+# -------------------------
 module "azure_redis_cache" {
   source = "./Modules/azure_redis_cache"
 
@@ -19,7 +21,9 @@ module "azure_redis_cache" {
   tags = var.tags
 }
 
+# -------------------------
 # CDN Profile Module
+# -------------------------
 module "cdn_profile" {
   source = "./Modules/cdn_profile"
 
@@ -31,7 +35,9 @@ module "cdn_profile" {
   tags = var.tags
 }
 
+# -------------------------
 # Disk Encryption Set Module
+# -------------------------
 module "desk_encryption_set" {
   source = "./Modules/disk_encryption_set"
 
@@ -50,7 +56,9 @@ module "desk_encryption_set" {
   tags = var.tags
 }
 
+# -------------------------
 # Autoscale Module
+# -------------------------
 module "autoscale" {
   source = "./Modules/terraform-avm-res-insights-autoscalesetting"
 
