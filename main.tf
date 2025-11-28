@@ -4,21 +4,21 @@
 module "azure_redis_cache" {
   source = "./Modules/azure_redis_cache"
 
-  name                          = var.redis_name
-  location                      = var.redis_location
-  resource_group_name           = var.resource_group_name
-  pricing_tier                  = var.redis_pricing_tier
-  capacity                      = var.redis_capacity
-  family                        = var.redis_family
-  sku_name                      = var.redis_pricing_tier
-  enable_non_ssl_port           = var.redis_enable_non_ssl_port
-  zones                         = var.redis_zones
-  shard_count                   = var.redis_shard_count
-  rdb_backup_enabled            = var.redis_rdb_backup_enabled
-  rdb_backup_frequency          = var.redis_rdb_backup_frequency
-  rdb_storage_connection_string = var.redis_rdb_storage_connection_string
-  subnet_id                     = var.redis_subnet_id
-  tags                          = var.redis_tags
+  redis_name                          = var.redis_name
+  redis_location                      = var.redis_location
+  resource_group_name                 = var.resource_group_name
+  redis_pricing_tier                  = var.redis_pricing_tier
+  redis_capacity                      = var.redis_capacity
+  redis_family                        = var.redis_family
+  redis_pricing_tier                  = var.redis_pricing_tier
+  redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
+  redis_zones                         = var.redis_zones
+  redis_shard_count                   = var.redis_shard_count
+  redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
+  redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
+  redis_rdb_storage_connection_string = var.redis_rdb_storage_connection_string
+  redis_subnet_id                     = var.redis_subnet_id
+  redis_tags                          = var.redis_tags
 }
 
 # -------------------------
@@ -27,12 +27,11 @@ module "azure_redis_cache" {
 module "cdn_profile" {
   source = "./Modules/cdn_profile"
 
-  name                = var.cdn_profile_name
-  resource_group_name = var.resource_group_name
-  location            = var.cdn_location
-  sku                 = var.cdn_pricing_tier
-
-  tags = var.cdn_tags
+  cdn_profile_name       = var.cdn_profile_name
+  resource_group_name    = var.resource_group_name
+  cdn_location           = var.cdn_location
+  cdn_pricing_tier       = var.cdn_pricing_tier
+  cdn_tags               = var.cdn_tags
 }
 
 # -------------------------
@@ -41,19 +40,19 @@ module "cdn_profile" {
 module "desk_encryption_set" {
   source = "./Modules/disk_encryption_set"
 
-  name                      = var.des_name
-  location                  = var.location
-  resource_group_name       = var.resource_group_name
-  key_vault_key_id          = var.key_vault_key_id
-  managed_hsm_key_id        = var.managed_hsm_key_id
-  encryption_type           = var.encryption_type
-  auto_key_rotation_enabled = var.auto_key_rotation_enabled
-  federated_client_id       = var.federated_client_id
-  key_vault_resource_id     = var.key_vault_resource_id
-  enable_telemetry          = var.enable_telemetry
-  lock                      = var.lock
+  des_name                     = var.des_name
+  des_location                 = var.des_location
+  resource_group_name          = var.resource_group_name
+  des_key_vault_key_id          = var.des_key_vault_key_id
+  des_managed_hsm_key_id        = var.des_managed_hsm_key_id
+  des_encryption_type           = var.des_encryption_type
+  des_auto_key_rotation_enabled = var.des_auto_key_rotation_enabled
+  des_tags                      = var.des_tags
+  des_federated_client_id       = var.des_federated_client_id
+  des_key_vault_resource_id     = var.des_key_vault_resource_id
+  des_lock                      = var.des_lock
+  des_enable_telemetry          = var.des_enable_telemetry
 
-  tags = var.tags
 }
 
 # -------------------------
@@ -62,17 +61,16 @@ module "desk_encryption_set" {
 module "autoscale" {
   source = "./Modules/terraform-avm-res-insights-autoscalesetting"
 
-  name                 = var.autoscale_name
-  resource_group_name  = var.resource_group_name
-  location             = var.location
-  target_resource_id   = var.autoscale_target_resource_id
-  enabled              = var.autoscale_enabled
-  notification         = var.autoscale_notification
-  profiles             = var.autoscale_profiles
-  predictive           = var.autoscale_predictive
-  enable_telemetry     = var.enable_telemetry
-
-  tags = var.tags
+  autoscale_name               = var.autoscale_name
+  resource_group_name          = var.resource_group_name
+  autoscale_location           = var.autoscale_location
+  autoscale_target_resource_id = var.autoscale_target_resource_id
+  autoscale_enabled            = var.autoscale_enabled
+  autoscale_tags               = var.autoscale_tags
+  autoscale_enable_telemetry   = var.autoscale_enable_telemetry
+  autoscale_notification       = var.autoscale_notification
+  autoscale_profiles           = var.autoscale_profiles
+  autoscale_predictive         = var.autoscale_predictive
 }
 
 # -------------------------
@@ -82,11 +80,11 @@ module "autoscale" {
 module "app_service_plan" {
   source = "./Modules/app_service_plan"
 
-  name                  = var.app_service_plan_name
-  resource_group_name   = var.resource_group_name
-  location              = var.app_service_plan_location
-  tier                  = var.app_service_plan_tier
-  size                  = var.app_service_plan_size
-  os_type               = var.app_service_plan_os_type
-  tags                  = var.app_service_plan_tags
+  app_service_plan_name                  = var.app_service_plan_name
+  resource_group_name                    = var.resource_group_name
+  app_service_plan_location              = var.app_service_plan_location
+  app_service_plan_tier                  = var.app_service_plan_tier
+  app_service_plan_size                  = var.app_service_plan_size
+  app_service_plan_os_type               = var.app_service_plan_os_type
+  app_service_plan_tags                  = var.app_service_plan_tags
 }
