@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 locals {
   is_premium = var.pricing_tier == "Premium"
 }
