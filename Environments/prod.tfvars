@@ -125,3 +125,14 @@ profiles = {
   }
 }
 
+# ====================================
+# App Service Pln
+# ====================================
+app_service_plan_name = "prod-asp"
+app_service_plan_tier                 = "PremiumV3"
+app_service_plan_size                 = "P1v3"
+
+app_service_plan_tags = {
+  environment = "prod"
+  project     = "appservice"
+}
