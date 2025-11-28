@@ -63,73 +63,91 @@ des_tags = {
 # ====================================
 # Autoscale Module Variables
 # ====================================
-autoscale_name                = "autoscale-prod"
-autoscale_target_resource_id  = "/subscriptions/<SUB-ID>/resourceGroups/rg-prod-app/providers/Microsoft.Compute/virtualMachineScaleSets/vmss-prod"
-autoscale_enabled             = true
-enable_telemetry              = true
+autoscale_location  = "East US"
+autoscale_name      = "prod-autoscale-setting"
 
-profiles = {
-  prod-default = {
-    name = "ProdProfile"
+autoscale_target_resource_id = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-prod-app/providers/Microsoft.Web/serverfarms/prod-appserviceplan"
+
+autoscale_profiles = {
+  business_hours = {
+    name = "prod-business-hours-scale"
+
     capacity = {
+      minimum = 2
       default = 3
-      maximum = 10
-      minimum = 3
+      maximum = 6
+    }
+
+    recurrence = {
+      timezone = "UTC"
+      days     = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+      hours    = [9, 10, 11, 12, 13, 14, 15, 16, 17]
+      minutes  = [0]
     }
 
     rules = {
-      cpu-scale-out = {
+      cpu_scale_out = {
         metric_trigger = {
-          metric_name      = "Percentage CPU"
+          metric_name      = "CpuPercentage"
           operator         = "GreaterThan"
           statistic        = "Average"
           time_aggregation = "Average"
           time_grain       = "PT1M"
           time_window      = "PT5M"
-          threshold        = 60
+          threshold        = 65
         }
         scale_action = {
           direction = "Increase"
           type      = "ChangeCount"
-          value     = "2"
-          cooldown  = "PT5M"
-        }
-      }
-
-      cpu-scale-in = {
-        metric_trigger = {
-          metric_name      = "Percentage CPU"
-          operator         = "LessThan"
-          statistic        = "Average"
-          time_aggregation = "Average"
-          time_grain       = "PT1M"
-          time_window      = "PT5M"
-          threshold        = 40
-        }
-        scale_action = {
-          direction = "Decrease"
-          type      = "ChangeCount"
           value     = "1"
-          cooldown  = "PT10M"
+          cooldown  = "PT5M"
         }
       }
     }
   }
+
+  off_hours = {
+    name = "prod-off-hours-scale"
+
+    capacity = {
+      minimum = 1
+      default = 2
+      maximum = 3
+    }
+
+    rules = {}
+  }
+}
+
+autoscale_enable_telemetry = true
+autoscale_enabled          = true
+
+autoscale_notification = {
+  email = {
+    send_to_subscription_administrator    = true
+    send_to_subscription_co_administrator = false
+    custom_emails                         = ["prod-alerts@example.com"]
+  }
+}
+
+autoscale_predictive = {
+  scale_mode      = "Enabled"
+  look_ahead_time = "PT30M"
 }
 
 autoscale_tags = {
   environment = "prod"
-  owner       = "platform-team"
-  critical    = "true"
+  owner       = "production-team"
 }
 # ====================================
 # App Service Pln
 # ====================================
-app_service_plan_name = "prod-asp"
-app_service_plan_tier                 = "PremiumV3"
-app_service_plan_size                 = "P1v3"
+app_service_plan_location = "East US"
+app_service_plan_name     = "prod-appserviceplan"
+app_service_plan_tier     = "Premium"
+app_service_plan_size     = "P1v3"
+app_service_plan_os_type  = "Linux"
 
 app_service_plan_tags = {
   environment = "prod"
-  project     = "appservice"
 }
