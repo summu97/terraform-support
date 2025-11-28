@@ -31,7 +31,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   location            = var.location
   target_resource_id  = var.target_resource_id
   enabled             = var.enabled
-  tags                = var.tags
+  tags                = var.autoscale_tags
 
   dynamic "notification" {
     for_each = var.notification == null ? [] : [var.notification]
