@@ -4,20 +4,21 @@
 module "azure_redis_cache" {
   source = "./Modules/azure_redis_cache"
 
-  redis_name                          = var.redis_name
-  redis_location                      = var.redis_location
-  resource_group_name                 = var.resource_group_name
-  redis_pricing_tier                  = var.redis_pricing_tier
-  redis_capacity                      = var.redis_capacity
-  redis_family                        = var.redis_family
-  redis_enable_non_ssl_port           = var.enable_non_ssl_port
-  redis_ones                          = var.redis_zones
-  redis_shard_count                   = var.redis_shard_count
-  redis_rdb_backup_enabled            = var.redis_rdb_backup_enabled
-  redis_rdb_backup_frequency          = var.redis_rdb_backup_frequency
-  redis_rdb_storage_connection_string = var.redis_rdb_storage_connection_string
-  redis_subnet_id                     = var.redis_subnet_id
-  redis_tags                          = var.redis_tags
+  name                          = var.redis_name
+  location                      = var.redis_location
+  resource_group_name           = var.resource_group_name
+  pricing_tier                  = var.redis_pricing_tier
+  capacity                      = var.redis_capacity
+  family                        = var.redis_family
+  sku_name                      = var.redis_pricing_tier
+  enable_non_ssl_port           = var.redis_enable_non_ssl_port
+  zones                         = var.redis_zones
+  shard_count                   = var.redis_shard_count
+  rdb_backup_enabled            = var.redis_rdb_backup_enabled
+  rdb_backup_frequency          = var.redis_rdb_backup_frequency
+  rdb_storage_connection_string = var.redis_rdb_storage_connection_string
+  subnet_id                     = var.redis_subnet_id
+  tags                          = var.redis_tags
 }
 
 # -------------------------
