@@ -5,10 +5,10 @@ output "key_vault_key_url" {
 
 output "resource" {
   description = "The full Disk Encryption Set resource object."
-  value       = azurerm_disk_encryption_set.this
+  value       = azurerm_disk_encryption_set.one
 }
 
 output "resource_id" {
   description = "The resource id of the Disk Encryption Set."
-  value       = azurerm_disk_encryption_set.this.id
+  value       = azurerm_disk_encryption_set.one.id
 }
