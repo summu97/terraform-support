@@ -62,7 +62,6 @@ des_tags = {
 # ====================================
 autoscale_location  = "East US"
 autoscale_name      = "dev-autoscale-setting"
-resource_group_name = "rg-dev-app"
 
 # Attach autoscale to DEV App Service
 autoscale_target_resource_id = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
