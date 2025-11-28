@@ -7,7 +7,7 @@ resource "modtm_telemetry" "telemetry" {
 
   # The actual module/provider fields will depend on the modtm provider's schema.
   # Provide a sensible set of attributes; adapt to your organization's modtm usage.
-  name       = "disk-encryptionset-${var.name}"
+  name       = "disk-encryptionset-${var.des_name}"
   id         = random_uuid.telemetry.result
   environment = var.resource_group_name
   location   = var.des_location
