@@ -34,6 +34,7 @@ variable "redis_pricing_tier" {
 # Redis family and capacity
 # Basic/Standard: C0, C1, C2...
 # Premium: P1, P2...
+
 variable "redis_family" {
   type        = string
   description = "Redis family type (C or P)"
@@ -50,36 +51,36 @@ variable "redis_enable_non_ssl_port" {
 }
 
 # PREMIUM ONLY VARIABLES
-variable "zones" {
+variable "redis_zones" {
   description = "Availability zones for Premium Redis"
   type        = list(string)
   default     = null
 }
 
-variable "shard_count" {
+variable "redis_shard_count" {
   description = "Enable clustering for Premium SKU"
   type        = number
   default     = null
 }
 
-variable "rdb_backup_enabled" {
+variable "redis_rdb_backup_enabled" {
   type        = bool
   default     = false
 }
 
-variable "rdb_backup_frequency" {
+variable "redis_rdb_backup_frequency" {
   description = "Frequency in minutes (15-1440)"
   type        = number
   default     = null
 }
 
-variable "rdb_storage_connection_string" {
+variable "redis_rdb_storage_connection_string" {
   description = "Storage connection string for RDB backup"
   type        = string
   default     = null
 }
 
-variable "subnet_id" {
+variable "redis_subnet_id" {
   description = "Subnet ID for VNet integration (Premium only)"
   type        = string
   default     = null
