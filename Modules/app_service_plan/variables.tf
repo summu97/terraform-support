@@ -6,19 +6,19 @@ variable "resource_group_name" {
   type = string
 }
 
-variable "location" {
+variable "app_service_plan_location" {
   type = string
 }
 
-variable "tier" {
+variable "app_service_plan_tier" {
   type = string
 }
 
-variable "size" {
+variable "app_service_plan_size" {
   type = string
 }
 
-variable "os_type" {
+variable "app_service_plan_os_type" {
   type    = string
   default = "Linux"
 }
