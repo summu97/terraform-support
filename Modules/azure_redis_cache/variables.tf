@@ -85,7 +85,7 @@ variable "subnet_id" {
   default     = null
 }
 
-variable "tags" {
+variable "redis_tags" {
   description = "Resource tags"
   type        = map(string)
   default     = {}
