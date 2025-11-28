@@ -21,6 +21,11 @@ variable "redis_name" {
   type        = string
 }
 
+variable "redis_location" {
+  description = "Azure Region"
+  type        = string
+}
+
 variable "redis_pricing_tier" {
   description = "Redis pricing tier (Basic/Standard/Premium)"
   type        = string
@@ -76,7 +81,11 @@ variable "redis_subnet_id" {
   default     = null
 }
 
-
+variable "redis_tags" {
+  description = "Resource tags"
+  type        = map(string)
+  default     = {}
+}
 #---------------------------
 # CDN MODULE VARIABLES
 #---------------------------
