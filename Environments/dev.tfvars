@@ -120,3 +120,14 @@ profiles = {
   }
 }
 
+# ====================================
+# App Service Plan
+# ====================================
+app_service_plan_name = "dev-asp"
+app_service_plan_tier                 = "Basic"
+app_service_plan_size                 = "B1"
+
+app_service_plan_tags = {
+  environment = "dev"
+  project     = "appservice"
+}
