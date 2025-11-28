@@ -104,9 +104,5 @@ This README:
 
 - Covers **module purpose, variables, outputs, usage, pros/cons**.  
 - Includes a **realistic HCL usage example**.  
-- Is developer-friendly and avoids any unnecessary explanation.  
 
-I can also generate **a matching README for all your modules** (Redis, CDN, Disk Encryption Set, Autoscale) in a **single unified README** if you want.  
-
-Do you want me to do that?
 
