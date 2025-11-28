@@ -1,13 +1,13 @@
-# Terraform Modules for Azure Infrastructure
+# Azure Terraform Modules
 
-This repository contains multiple reusable Terraform modules for Azure resources:
+This repository contains reusable Terraform modules for deploying Azure resources:
 
 - Redis Cache
 - CDN Profile
 - Disk Encryption Set
 - Autoscale Setting
 
-Each module is independent and can be run individually.
+Modules are independent but can be orchestrated together through `main.tf`.
 
 ---
 
@@ -15,15 +15,16 @@ Each module is independent and can be run individually.
 
 - Terraform >= 1.3.0
 - Azure CLI or Service Principal configured
-- Appropriate permissions in Azure subscription
+- Proper permissions in Azure subscription
+- `.tfvars` files for environment-specific variables
 
 ---
 
-## How to Run Each Module
+## How to Run Each Module Individually
 
-### 1. Redis Cache Module
+### 1. Redis Cache
 
 ```bash
 terraform init
-terraform plan -var-file="env/dev.tfvars" -target=module.redis_cache
-terraform apply -var-file="env/dev.tfvars" -target=module.redis_cache
+terraform plan -var-file="env/dev.tfvars" -target=module.azure_redis_cache
+terraform apply -var-file="env/dev.tfvars" -target=module.azure_redis_cache
