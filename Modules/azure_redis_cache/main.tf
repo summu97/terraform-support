@@ -2,7 +2,7 @@ locals {
   is_premium = var.redis_pricing_tier == "Premium"
 }
 
-resource "azurerm_redis_cache" "this" {
+resource "azurerm_redis_cache" "one" {
   name                = var.redis_name
   location            = var.redis_location
   resource_group_name       = var.resource_group_name
