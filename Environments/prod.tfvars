@@ -2,7 +2,6 @@
 # Global Variables (shared across modules)
 # ====================================
 subscription_id     = "PROD_SUBSCRIPTION_ID"
-location            = "Central India"
 resource_group_name = "prod-rg"
 
 
@@ -10,17 +9,18 @@ resource_group_name = "prod-rg"
 # Redis Cache Module Variables
 # ====================================
 redis_name          = "prod-redis-cache"
+redis_location      = ""
 redis_pricing_tier  = "Premium"  # Basic / Standard / Premium
 redis_family        = "P"
 redis_capacity      = 1
-enable_non_ssl_port = false
+redis_enable_non_ssl_port = false
 
 # Premium-only variables
 redis_zones                   = ["1", "2", "3"]
 redis_shard_count             = 3
-rdb_backup_enabled            = true
-rdb_backup_frequency          = 60
-rdb_storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=prodsa;AccountKey=XXXX"
+redis_rdb_backup_enabled            = true
+redis_rdb_backup_frequency          = 60
+redis_rdb_storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=prodsa;AccountKey=XXXX"
 redis_subnet_id               = "/subscriptions/.../subnets/redis-subnet"
 
 redis_tags = {
@@ -31,6 +31,7 @@ redis_tags = {
 # CDN Profile Module Variables
 # ====================================
 cdn_profile_name = "prod-cdn-profile"
+cdn_location        = ""
 cdn_pricing_tier = "Standard_Microsoft"
 
 cdn_tags = {
@@ -42,14 +43,15 @@ cdn_tags = {
 # Disk Encryption Set Module Variables
 # ====================================
 des_name                = "des-prod-001"
-key_vault_key_id        = "/subscriptions/<SUB>/resourceGroups/rg-kv-prod/providers/Microsoft.KeyVault/vaults/prod-kv/keys/prod-key"
-managed_hsm_key_id      = null
-key_vault_resource_id   = "/subscriptions/<SUB>/resourceGroups/rg-kv-prod/providers/Microsoft.KeyVault/vaults/prod-kv"
-encryption_type         = "EncryptionAtRestWithCustomerKey"
-auto_key_rotation_enabled = true
-federated_client_id      = null
-enable_telemetry         = true
-lock = {
+des_location                = ""
+des_key_vault_key_id        = "/subscriptions/<SUB>/resourceGroups/rg-kv-prod/providers/Microsoft.KeyVault/vaults/prod-kv/keys/prod-key"
+des_managed_hsm_key_id      = null
+des_key_vault_resource_id   = "/subscriptions/<SUB>/resourceGroups/rg-kv-prod/providers/Microsoft.KeyVault/vaults/prod-kv"
+des_encryption_type         = "EncryptionAtRestWithCustomerKey"
+des_auto_key_rotation_enabled = true
+des_federated_client_id      = null
+des_enable_telemetry         = true
+des_lock = {
   kind = "CanNotDelete"
   name = "lock-des-prod-001"
 }
@@ -139,6 +141,7 @@ autoscale_tags = {
   environment = "prod"
   owner       = "production-team"
 }
+
 # ====================================
 # App Service Pln
 # ====================================
