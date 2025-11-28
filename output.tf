@@ -17,11 +17,11 @@ output "redis_port" {
 # CDN Module Outputs
 # -------------------------
 output "cdn_profile_id" {
-  value = module.cdn.cdn_profile_id
+  value = module.cdn_profile.cdn_profile_id
 }
 
 output "cdn_profile_name" {
-  value = module.cdn.cdn_profile_name
+  value = module.cdn_profile.cdn_profile_name
 }
 
 # -------------------------
