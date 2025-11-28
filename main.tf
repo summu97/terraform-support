@@ -81,11 +81,11 @@ module "autoscale" {
 module "app_service_plan" {
   source = "./Modules/app_service_plan"
 
-  app_service_plan_name                  = var.app_service_plan_name
-  resource_group_name                    = var.resource_group_name
-  app_service_plan_location              = var.app_service_plan_location
-  app_service_plan_tier                  = var.app_service_plan_tier
-  app_service_plan_size                  = var.app_service_plan_size
-  app_service_plan_os_type               = var.app_service_plan_os_type
-  app_service_plan_tags                  = var.app_service_plan_tags
+  name                  = var.app_service_plan_name
+  resource_group_name   = var.resource_group_name
+  location              = var.app_service_plan_location
+  tier                  = var.app_service_plan_tier
+  size                  = var.app_service_plan_size
+  os_type               = var.app_service_plan_os_type
+  tags                  = var.app_service_plan_tags
 }
