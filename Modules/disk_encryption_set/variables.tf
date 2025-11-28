@@ -67,7 +67,7 @@ EOF
   default = null
 }
 
-variable "tags" {
+variable "des_tags" {
   description = "Optional tags to apply to resources."
   type        = map(string)
   default     = {}
