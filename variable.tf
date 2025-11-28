@@ -48,7 +48,7 @@ variable "redis_capacity" {
   type        = number
 }
 
-variable "enable_non_ssl_port" {
+variable "redis_enable_non_ssl_port" {
   type        = bool
   default     = false
 }
@@ -65,18 +65,18 @@ variable "redis_shard_count" {
   default     = null
 }
 
-variable "rdb_backup_enabled" {
+variable "redis_rdb_backup_enabled" {
   type        = bool
   default     = false
 }
 
-variable "rdb_backup_frequency" {
+variable "redis_rdb_backup_frequency" {
   description = "Backup frequency in minutes"
   type        = number
   default     = null
 }
 
-variable "rdb_storage_connection_string" {
+variable "redis_rdb_storage_connection_string" {
   description = "Storage connection string for RDB backup"
   type        = string
   default     = null
@@ -128,29 +128,29 @@ variable "auto_key_rotation_enabled" {
   default     = false
 }
 
-variable "enable_telemetry" {
+variable "des_enable_telemetry" {
   type        = bool
   default     = true
 }
 
-variable "encryption_type" {
+variable "des_encryption_type" {
   description = "Encryption type"
   type        = string
   default     = "EncryptionAtRestWithCustomerKey"
 }
 
-variable "federated_client_id" {
+variable "des_federated_client_id" {
   description = "Principal ID for access"
   type        = string
   default     = null
 }
 
-variable "managed_hsm_key_id" {
+variable "des_managed_hsm_key_id" {
   type        = string
   default     = null
 }
 
-variable "lock" {
+variable "des_lock" {
   description = "Optional lock configuration"
   type = object({
     kind = string
