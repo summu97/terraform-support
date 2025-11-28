@@ -1,9 +1,9 @@
-variable "location" {
+variable "autoscale_location" {
   description = "Location for metadata (not the target resource)."
   type        = string
 }
 
-variable "name" {
+variable "autoscale_name" {
   description = "Name of the autoscale setting resource"
   type        = string
 }
@@ -13,12 +13,12 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "target_resource_id" {
+variable "autoscale_target_resource_id" {
   description = "The resource id of the scalable resource to attach autoscale to"
   type        = string
 }
 
-variable "profiles" {
+variable "autoscale_profiles" {
   description = "Map of autoscale profiles"
   type = map(object({
     name     = string
@@ -67,19 +67,19 @@ variable "profiles" {
   }))
 }
 
-variable "enable_telemetry" {
+variable "autoscale_enable_telemetry" {
   description = "Enable telemetry resource"
   type        = bool
   default     = true
 }
 
-variable "enabled" {
+variable "autoscale_enabled" {
   description = "Whether autoscale setting is enabled"
   type        = bool
   default     = true
 }
 
-variable "notification" {
+variable "autoscale_notification" {
   description = "Notification block for autoscale (email/webhooks)"
   type = optional(object({
     email = optional(object({
@@ -95,7 +95,7 @@ variable "notification" {
   default = null
 }
 
-variable "predictive" {
+variable "autoscale_predictive" {
   description = "Predictive autoscale configuration"
   type        = optional(object({
     scale_mode     = string
