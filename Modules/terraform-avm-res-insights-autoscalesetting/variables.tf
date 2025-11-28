@@ -104,7 +104,7 @@ variable "predictive" {
   default = null
 }
 
-variable "tags" {
+variable "autoscale_tags" {
   description = "Tags"
   type        = optional(map(string), null)
   default     = null
