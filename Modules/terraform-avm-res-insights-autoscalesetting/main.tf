@@ -15,7 +15,7 @@ resource "random_uuid" "telemetry" {}
 
 // Optional telemetry resource (modtm)
 resource "modtm_telemetry" "telemetry" {
-  count = var.enable_telemetry ? 1 : 0
+  count = var.autoscale_enable_telemetry ? 1 : 0
 
   name        = "autoscale-telemetry-${random_uuid.telemetry.result}"
   description = "Telemetry for autoscale setting created by module"
@@ -26,15 +26,15 @@ resource "modtm_telemetry" "telemetry" {
 }
 
 resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
-  name                = var.name
+  name                = var.autoscale_name
   resource_group_name = var.resource_group_name
-  location            = var.location
-  target_resource_id  = var.target_resource_id
-  enabled             = var.enabled
-  tags                = var.autoscale_tags
+  location            = var.autoscale_location
+  target_resource_id  = var.autoscale_target_resource_id
+  enabled             = var.autoscale_enabled
+  tags                = var.autoscale_autoscale_tags
 
   dynamic "notification" {
-    for_each = var.notification == null ? [] : [var.notification]
+    for_each = var.autoscale_notification == null ? [] : [var.autoscale_notification]
     content {
       dynamic "email" {
         for_each = lookup(notification.value, "email", null) == null ? [] : [lookup(notification.value, "email")]
@@ -56,7 +56,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   }
 
   dynamic "profile" {
-    for_each = var.profiles
+    for_each = var.autoscale_profiles
     content {
       name = profile.value.name
 
