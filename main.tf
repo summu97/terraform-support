@@ -27,12 +27,12 @@ module "azure_redis_cache" {
 module "cdn_profile" {
   source = "./Modules/cdn_profile"
 
-  cdn_profile_name    = var.cdn_profile_name
+  name                = var.cdn_profile_name
   resource_group_name = var.resource_group_name
-  location            = var.location
-  pricing_tier        = var.cdn_pricing_tier
+  location            = var.cdn_location
+  sku                 = var.cdn_pricing_tier
 
-  tags = var.tags
+  tags = var.cdn_tags
 }
 
 # -------------------------
