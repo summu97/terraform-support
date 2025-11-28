@@ -252,3 +252,34 @@ variable "autoscale_predictive" {
   }), null)
   default = null
 }
+
+#---------------------------
+# app_service_plan
+#---------------------------
+
+variable "app_service_plan_name" {
+  type        = string
+  description = "Name of the App Service Plan"
+}
+
+variable "tier" {
+  type        = string
+  description = "Pricing tier (Basic, Standard, Premium)"
+}
+
+variable "size" {
+  type        = string
+  description = "Instance size (B1, S1, P1v3)"
+}
+
+variable "os_type" {
+  type        = string
+  description = "OS type to run the plan"
+  default     = "Linux"
+}
+
+variable "app_service_plan_tags" {
+  type        = map(string)
+  default     = {}
+}
+
