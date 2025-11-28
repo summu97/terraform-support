@@ -1,19 +1,19 @@
-variable "key_vault_key_id" {
+variable "des_key_vault_key_id" {
   description = "The full resource id of the Key Vault key to be used by the Disk Encryption Set."
   type        = string
 }
 
-variable "key_vault_resource_id" {
+variable "des_key_vault_resource_id" {
   description = "The resource id of the Key Vault (or Managed HSM) that contains the key."
   type        = string
 }
 
-variable "location" {
+variable "des_location" {
   description = "Azure location to deploy the Disk Encryption Set into."
   type        = string
 }
 
-variable "name" {
+variable "des_name" {
   description = "Name of the Disk Encryption Set resource."
   type        = string
 }
@@ -23,37 +23,37 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "auto_key_rotation_enabled" {
+variable "des_auto_key_rotation_enabled" {
   description = "Enable automatic key rotation for the Disk Encryption Set."
   type        = bool
   default     = false
 }
 
-variable "enable_telemetry" {
+variable "des_enable_telemetry" {
   description = "Enable telemetry/usage reporting via modtm provider."
   type        = bool
   default     = true
 }
 
-variable "encryption_type" {
+variable "des_encryption_type" {
   description = "Type of encryption for the Disk Encryption Set."
   type        = string
   default     = "EncryptionAtRestWithCustomerKey"
 }
 
-variable "federated_client_id" {
+variable "des_federated_client_id" {
   description = "(Optional) Principal id (managed identity or service principal) that should be granted access to the key."
   type        = string
   default     = null
 }
 
-variable "managed_hsm_key_id" {
+variable "des_managed_hsm_key_id" {
   description = "(Optional) Managed HSM key id, if using Managed HSM rather than Key Vault."
   type        = string
   default     = null
 }
 
-variable "lock" {
+variable "des_lock" {
   description = <<EOF
 Optional management lock object. Set to null to skip creating a lock.
 If provided it must contain:
