@@ -6,28 +6,6 @@ location            = "eastus"
 resource_group_name = "dev-rg"
 
 # ====================================
-# Module-Specific Tags
-# ====================================
-redis_tags = {
-  environment = "dev"
-}
-
-cdn_tags = {
-  environment = "dev"
-  department  = "IT"
-}
-
-des_tags = {
-  environment = "dev"
-  project     = "disk-encryption"
-}
-
-autoscale_tags = {
-  environment = "dev"
-  owner       = "devops"
-}
-
-# ====================================
 # Redis Cache Module Variables
 # ====================================
 redis_name          = "dev-redis-cache"
@@ -44,11 +22,20 @@ rdb_backup_frequency               = null
 rdb_storage_connection_string      = null
 redis_subnet_id                     = null
 
+redis_tags = {
+  environment = "dev"
+}
+
 # ====================================
 # CDN Profile Module Variables
 # ====================================
 cdn_profile_name    = "dev-cdn-profile"
 cdn_pricing_tier    = "Standard_Microsoft"
+
+cdn_tags = {
+  environment = "dev"
+  department  = "IT"
+}
 
 # ====================================
 # Disk Encryption Set Module Variables
@@ -62,6 +49,11 @@ auto_key_rotation_enabled = false
 federated_client_id      = null
 enable_telemetry         = true
 lock                     = null
+
+des_tags = {
+  environment = "dev"
+  project     = "disk-encryption"
+}
 
 # ====================================
 # Autoscale Module Variables
@@ -118,6 +110,11 @@ profiles = {
       }
     }
   }
+}
+
+autoscale_tags = {
+  environment = "dev"
+  owner       = "devops"
 }
 
 # ====================================
