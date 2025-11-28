@@ -100,7 +100,27 @@ variable "cdn_pricing_tier" {
   type        = string
 }
 
+variable "cdn_location" {
+  description = "Azure Region"
+  type        = string
+}
 
+variable "cdn_pricing_tier" {
+  description = <<EOF
+Available CDN SKU options:
+- Standard_Verizon
+- Premium_Verizon
+- Standard_Akamai
+- Standard_Microsoft  (Recommended)
+EOF
+  type = string
+}
+
+variable "cdn_tags" {
+  description = "Tags to assign to the CDN profile"
+  type        = map(string)
+  default     = {}
+}
 ############################
 # DISK ENCRYPTION SET (DES) VARIABLES
 ############################
