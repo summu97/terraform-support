@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features = {}
-}
-
 # Generate a stable UUID used in telemetry or naming if needed
 resource "random_uuid" "telemetry" {}
 
