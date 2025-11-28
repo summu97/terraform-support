@@ -31,7 +31,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   location            = var.autoscale_location
   target_resource_id  = var.autoscale_target_resource_id
   enabled             = var.autoscale_enabled
-  tags                = var.autoscale_autoscale_tags
+  tags                = var.autoscale_tags
 
   dynamic "notification" {
     for_each = var.autoscale_notification == null ? [] : [var.autoscale_notification]
@@ -127,12 +127,12 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   }
 
   dynamic "predictive" {
-    for_each = var.predictive == null ? [] : [var.predictive]
+    for_each = var.autoscale_predictive == null ? [] : [var.autoscale_predictive]
     content {
       scale_mode     = predictive.value.scale_mode
       look_ahead_time = try(predictive.value.look_ahead_time, null)
     }
   }
 
-  depends_on = var.enable_telemetry ? [modtm_telemetry.telemetry] : []
+  depends_on = var.autoscale_enable_telemetry ? [modtm_telemetry.telemetry] : []
 }
