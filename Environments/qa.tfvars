@@ -120,3 +120,15 @@ profiles = {
   }
 }
 
+
+# ====================================
+# App Service Plan
+# ====================================
+app_service_plan_name = "qa-asp"
+app_service_plan_tier                 = "Standard"
+app_service_plan_size                 = "S1"
+
+app_service_plan_tags = {
+  environment = "qa"
+  project     = "appservice"
+}
