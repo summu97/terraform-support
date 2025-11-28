@@ -5,7 +5,7 @@ locals {
 resource "azurerm_redis_cache" "this" {
   name                = var.redis_name
   location            = var.redis_location
-  group_name       = var.resource_group_name
+  resource_group_name       = var.resource_group_name
   capacity            = var.redis_capacity
   family              = var.redis_family
   sku_name            = var.redis_pricing_tier
