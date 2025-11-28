@@ -4,5 +4,5 @@ resource "azurerm_cdn_profile" "this" {
   location            = var.location
   sku                 = var.pricing_tier
 
-  tags = var.tags
+  tags = var.cdn_tags
 }
