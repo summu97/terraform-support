@@ -13,13 +13,13 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
+variable "cdn_location" {
   description = "Azure region for the CDN profile"
   type        = string
   default     = "East US"
 }
 
-variable "pricing_tier" {
+variable "cdn_pricing_tier" {
   description = <<EOF
 Available CDN SKU options:
 - Standard_Verizon
