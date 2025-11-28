@@ -3,13 +3,13 @@ locals {
 }
 
 resource "azurerm_redis_cache" "this" {
-  redis_name                = var.redis_name
-  redis_location            = var.redis_location
-  resource_group_name       = var.resource_group_name
-  redis_capacity            = var.redis_capacity
-  redis_family              = var.redis_family
-  redis_sku_name            = var.redis_pricing_tier
-  redis_enable_non_ssl_port = var.redis_enable_non_ssl_port
+  name                = var.redis_name
+  location            = var.redis_location
+  group_name       = var.resource_group_name
+  capacity            = var.redis_capacity
+  family              = var.redis_family
+  sku_name            = var.redis_pricing_tier
+  enable_non_ssl_port = var.redis_enable_non_ssl_port
 
   # Premium Tier Enhancements
   # --------------------------
