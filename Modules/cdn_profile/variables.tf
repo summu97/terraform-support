@@ -30,7 +30,7 @@ EOF
   type = string
 }
 
-variable "tags" {
+variable "cdn_tags" {
   description = "Tags to assign to the CDN profile"
   type        = map(string)
   default     = {}
