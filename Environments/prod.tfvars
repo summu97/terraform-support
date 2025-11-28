@@ -5,29 +5,6 @@ subscription_id     = "PROD_SUBSCRIPTION_ID"
 location            = "Central India"
 resource_group_name = "prod-rg"
 
-# ====================================
-# Module-Specific Tags
-# ====================================
-redis_tags = {
-  environment = "prod"
-}
-
-cdn_tags = {
-  environment = "prod"
-  department  = "IT"
-}
-
-des_tags = {
-  environment = "prod"
-  project     = "disk-encryption"
-  owner       = "platform-team"
-}
-
-autoscale_tags = {
-  environment = "prod"
-  owner       = "platform-team"
-  critical    = "true"
-}
 
 # ====================================
 # Redis Cache Module Variables
@@ -46,11 +23,20 @@ rdb_backup_frequency          = 60
 rdb_storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=prodsa;AccountKey=XXXX"
 redis_subnet_id               = "/subscriptions/.../subnets/redis-subnet"
 
+redis_tags = {
+  environment = "prod"
+}
+
 # ====================================
 # CDN Profile Module Variables
 # ====================================
 cdn_profile_name = "prod-cdn-profile"
 cdn_pricing_tier = "Standard_Microsoft"
+
+cdn_tags = {
+  environment = "prod"
+  department  = "IT"
+}
 
 # ====================================
 # Disk Encryption Set Module Variables
@@ -66,6 +52,12 @@ enable_telemetry         = true
 lock = {
   kind = "CanNotDelete"
   name = "lock-des-prod-001"
+}
+
+des_tags = {
+  environment = "prod"
+  project     = "disk-encryption"
+  owner       = "platform-team"
 }
 
 # ====================================
@@ -125,6 +117,11 @@ profiles = {
   }
 }
 
+autoscale_tags = {
+  environment = "prod"
+  owner       = "platform-team"
+  critical    = "true"
+}
 # ====================================
 # App Service Pln
 # ====================================
