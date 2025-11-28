@@ -5,12 +5,12 @@ module "azure_redis_cache" {
   source = "./Modules/azure_redis_cache"
 
   redis_name                    = var.redis_name
-  location                      = var.location
+  redis_location                      = var.redis_location
   resource_group_name           = var.resource_group_name
-  pricing_tier                  = var.redis_pricing_tier
-  capacity                      = var.redis_capacity
-  family                        = var.redis_family
-  enable_non_ssl_port           = var.enable_non_ssl_port
+  redis_pricing_tier                  = var.redis_pricing_tier
+  redis_capacity                      = var.redis_capacity
+  redis_family                        = var.redis_family
+  redis_enable_non_ssl_port           = var.enable_non_ssl_port
   zones                         = var.redis_zones
   shard_count                   = var.redis_shard_count
   rdb_backup_enabled            = var.rdb_backup_enabled
