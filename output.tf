@@ -43,15 +43,15 @@ output "des_resource_id" {
 # Autoscale Module Outputs
 # -------------------------
 output "autoscale_resource_id" {
-  value = module.autoscale.resource_id
+  value = module.terraform-avm-res-insights-autoscalesetting.resource_id
 }
 
 output "autoscale_resource_name" {
-  value = module.autoscale.resource_name
+  value = module.terraform-avm-res-insights-autoscalesetting.resource_name
 }
 
 output "autoscale_resource" {
-  value = module.autoscale.resource
+  value = module.terraform-avm-res-insights-autoscalesetting.resource
 }
 
 # -------------------------
