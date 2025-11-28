@@ -95,11 +95,6 @@ variable "cdn_profile_name" {
   type        = string
 }
 
-variable "cdn_pricing_tier" {
-  description = "CDN SKU"
-  type        = string
-}
-
 variable "cdn_location" {
   description = "Azure Region"
   type        = string
