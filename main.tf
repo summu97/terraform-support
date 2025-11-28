@@ -74,3 +74,19 @@ module "autoscale" {
 
   tags = var.tags
 }
+
+# -------------------------
+# app_service_plan
+# -------------------------
+
+module "app_service_plan" {
+  source = "./modules/app_service_plan_module"
+
+  app_service_plan_name = var.app_service_plan_name
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  tier                  = var.tier
+  size                  = var.size
+  os_type               = var.os_type
+  tags                  = var.app_service_plan_tags
+}
