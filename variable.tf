@@ -256,23 +256,27 @@ variable "autoscale_predictive" {
 #---------------------------
 # app_service_plan
 #---------------------------
+variable "app_service_plan_location" {
+  description = "app_service_plan Region for resources"
+  type        = string
+}
 
 variable "app_service_plan_name" {
   type        = string
   description = "Name of the App Service Plan"
 }
 
-variable "tier" {
+variable "app_service_plan_tier" {
   type        = string
   description = "Pricing tier (Basic, Standard, Premium)"
 }
 
-variable "size" {
+variable "app_service_plan_size" {
   type        = string
   description = "Instance size (B1, S1, P1v3)"
 }
 
-variable "os_type" {
+variable "app_service_plan_os_type" {
   type        = string
   description = "OS type to run the plan"
   default     = "Linux"
