@@ -15,7 +15,7 @@ resource "modtm_telemetry" "telemetry" {
 }
 
 # Create Disk Encryption Set
-resource "azurerm_disk_encryption_set" "this" {
+resource "azurerm_disk_encryption_set" "one" {
   name                = var.des_name
   location            = var.des_location
   resource_group_name = var.resource_group_name
