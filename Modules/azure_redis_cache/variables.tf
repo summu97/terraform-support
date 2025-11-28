@@ -13,7 +13,7 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
+variable "redis_location" {
   description = "Azure Region"
   type        = string
 }
@@ -26,7 +26,7 @@ variable "location" {
 # - Standard
 # - Premium
 # =======================
-variable "pricing_tier" {
+variable "redis_pricing_tier" {
   description = "Redis pricing tier"
   type        = string
 }
@@ -34,17 +34,17 @@ variable "pricing_tier" {
 # Redis family and capacity
 # Basic/Standard: C0, C1, C2...
 # Premium: P1, P2...
-variable "family" {
+variable "redis_family" {
   type        = string
   description = "Redis family type (C or P)"
 }
 
-variable "capacity" {
+variable "redis_capacity" {
   type        = number
   description = "Capacity SKU (0-6 depending on tier)"
 }
 
-variable "enable_non_ssl_port" {
+variable "redis_enable_non_ssl_port" {
   type        = bool
   default     = false
 }
