@@ -80,15 +80,15 @@ autoscale_profiles = {
     rules = {
       cpu_scale_out = {
         metric_trigger = {
-          metric_name            = "CpuPercentage"
-          operator               = "GreaterThan"
-          statistic              = "Average"
-          time_aggregation       = "Average"
-          time_grain             = "PT1M"
-          time_window            = "PT5M"
-          threshold              = 70
-          dimensions             = []  # Optional
-          divide_by_instance_count = false
+          metric_name              = "CpuPercentage"
+          operator                 = "GreaterThan"
+          statistic                = "Average"
+          time_aggregation         = "Average"
+          time_grain               = "PT1M"
+          time_window              = "PT5M"
+          threshold                = 70
+          dimensions               = []        # Optional
+          divide_by_instance_count = false     # Optional
         }
         scale_action = {
           direction = "Increase"
@@ -100,15 +100,15 @@ autoscale_profiles = {
 
       cpu_scale_in = {
         metric_trigger = {
-          metric_name            = "CpuPercentage"
-          operator               = "LessThan"
-          statistic              = "Average"
-          time_aggregation       = "Average"
-          time_grain             = "PT1M"
-          time_window            = "PT5M"
-          threshold              = 30
-          dimensions             = []  # Optional
-          divide_by_instance_count = false
+          metric_name              = "CpuPercentage"
+          operator                 = "LessThan"
+          statistic                = "Average"
+          time_aggregation         = "Average"
+          time_grain               = "PT1M"
+          time_window              = "PT5M"
+          threshold                = 30
+          dimensions               = []        # Optional
+          divide_by_instance_count = false     # Optional
         }
         scale_action = {
           direction = "Decrease"
@@ -119,7 +119,7 @@ autoscale_profiles = {
       }
     }
 
-    # Optional recurrence block (weekly schedule)
+    # Optional recurrence (weekly schedule)
     recurrence = {
       timezone = "UTC"
       days     = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
@@ -127,7 +127,7 @@ autoscale_profiles = {
       minutes  = [0]
     }
 
-    # Optional fixed_date block example (can remove if not needed)
+    # Optional fixed_date (can remove if not needed)
     fixed_date = {
       start    = "2025-12-01T00:00:00Z"
       end      = "2025-12-31T23:59:59Z"
@@ -149,6 +149,7 @@ autoscale_tags = {
   environment = "dev"
   owner       = "devops"
 }
+
 
 
 # ====================================
