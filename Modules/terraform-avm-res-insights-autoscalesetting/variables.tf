@@ -42,15 +42,6 @@ variable "autoscale_profiles" {
           threshold          = number
           metric_namespace   = optional(string)
 
-          # Optional dimensions for dynamic blocks
-          dimensions = optional(
-            list(object({
-              name     = string
-              operator = string
-              values   = list(string)
-            })),
-            []
-          )
 
           divide_by_instance_count = optional(bool)
         })
