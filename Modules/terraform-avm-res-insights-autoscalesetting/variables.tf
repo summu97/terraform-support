@@ -32,15 +32,15 @@ variable "autoscale_profiles" {
     rules = optional(
       map(object({
         metric_trigger = object({
-          metric_name              = string
-          metric_resource_id       = optional(string)
-          operator                 = string
-          statistic                = string
-          time_aggregation         = string
-          time_grain               = string
-          time_window              = string
-          threshold                = number
-          metric_namespace         = optional(string)
+          metric_name        = string
+          metric_resource_id = optional(string)
+          operator           = string
+          statistic          = string
+          time_aggregation   = string
+          time_grain         = string
+          time_window        = string
+          threshold          = number
+          metric_namespace   = optional(string)
 
           # Optional dimensions for dynamic blocks
           dimensions = optional(
@@ -69,12 +69,12 @@ variable "autoscale_profiles" {
     fixed_date = optional(object({
       start    = string
       end      = string
-      timezone = optional(string, "UTC")
+      timezone = optional(string, "UTC") # ✅ only type + default
     }))
 
     # Optional recurrence (weekly/daily schedule)
     recurrence = optional(object({
-      timezone = optional(string, "UTC")
+      timezone = optional(string, "UTC") # ✅ only type + default
       days     = list(string)
       hours    = list(number)
       minutes  = list(number)
