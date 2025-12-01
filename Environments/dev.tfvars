@@ -80,14 +80,15 @@ autoscale_profiles = {
     rules = {
       cpu_scale_out = {
         metric_trigger = {
-          metric_name      = "CpuPercentage"
-          operator         = "GreaterThan"
-          statistic        = "Average"
-          time_aggregation = "Average"
-          time_grain       = "PT1M"
-          time_window      = "PT5M"
-          threshold        = 70
-          # dimensions removed here
+          metric_name              = "CpuPercentage"
+          operator                 = "GreaterThan"
+          statistic                = "Average"
+          time_aggregation         = "Average"
+          time_grain               = "PT1M"
+          time_window              = "PT5M"
+          threshold                = 70
+          dimensions               = []       # Required for Terraform v3+
+          divide_by_instance_count = false
         }
         scale_action = {
           direction = "Increase"
@@ -99,14 +100,15 @@ autoscale_profiles = {
 
       cpu_scale_in = {
         metric_trigger = {
-          metric_name      = "CpuPercentage"
-          operator         = "LessThan"
-          statistic        = "Average"
-          time_aggregation = "Average"
-          time_grain       = "PT1M"
-          time_window      = "PT5M"
-          threshold        = 30
-          # dimensions removed here
+          metric_name              = "CpuPercentage"
+          operator                 = "LessThan"
+          statistic                = "Average"
+          time_aggregation         = "Average"
+          time_grain               = "PT1M"
+          time_window              = "PT5M"
+          threshold                = 30
+          dimensions               = []       # Required for Terraform v3+
+          divide_by_instance_count = false
         }
         scale_action = {
           direction = "Decrease"
@@ -136,16 +138,13 @@ autoscale_profiles = {
 
 autoscale_enable_telemetry = true
 autoscale_enabled          = true
-autoscale_notification      = null
-autoscale_predictive        = null
+autoscale_notification     = null
+autoscale_predictive       = null
 
 autoscale_tags = {
   environment = "dev"
   owner       = "devops"
 }
-
-
-
 
 # ====================================
 # App Service Plan
