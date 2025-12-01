@@ -5,7 +5,6 @@ resource "azurerm_service_plan" "asp" {
 
   # Required arguments for azurerm_service_plan
   sku_name = var.app_service_plan_size     # e.g., "S1", "P1v2"
-  sku_tier = var.app_service_plan_tier     # e.g., "Standard", "Premium"
   os_type  = var.app_service_plan_os       # "Linux" or "Windows"
 
   # Optional: kind & reserved are inferred from os_type
