@@ -66,7 +66,7 @@ autoscale_name      = "dev-autoscale-setting"
 # Attach autoscale to DEV App Service
 autoscale_target_resource_id = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
 
-# Autoscale profiles (map)
+# Autoscale profiles
 autoscale_profiles = {
   default = {
     name = "dev-default-scaling"
