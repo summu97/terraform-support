@@ -4,22 +4,22 @@ variable "autoscale_location" {
 }
 
 variable "autoscale_name" {
-  description = "Name of the autoscale setting resource"
+  description = "Name of the autoscale setting resource."
   type        = string
 }
 
 variable "resource_group_name" {
-  description = "Resource group in which the autoscale setting will exist"
+  description = "Resource group in which the autoscale setting will exist."
   type        = string
 }
 
 variable "autoscale_target_resource_id" {
-  description = "The resource id of the scalable resource to attach autoscale to"
+  description = "The resource ID of the scalable resource to attach autoscale to."
   type        = string
 }
 
 variable "autoscale_profiles" {
-  description = "Map of autoscale profiles"
+  description = "Map of autoscale profiles."
   type = map(object({
     name     = string
     capacity = object({
@@ -27,22 +27,24 @@ variable "autoscale_profiles" {
       maximum = number
       minimum = number
     })
+
+    # Scaling rules (optional)
     rules = optional(map(object({
       metric_trigger = object({
-        metric_name            = string
-        metric_resource_id     = optional(string)
-        operator               = string
-        statistic              = string
-        time_aggregation       = string
-        time_grain             = string
-        time_window            = string
-        threshold              = number
-        metric_namespace       = optional(string)
-        dimensions             = optional(list(object({
+        metric_name              = string
+        metric_resource_id       = optional(string)
+        operator                 = string
+        statistic                = string
+        time_aggregation         = string
+        time_grain               = string
+        time_window              = string
+        threshold                = number
+        metric_namespace         = optional(string)
+        dimensions               = optional(list(object({
           name     = string
           operator = string
           values   = list(string)
-        })), [])
+        })), [])  # Directly as list for v3+
         divide_by_instance_count = optional(bool)
       })
 
@@ -54,12 +56,14 @@ variable "autoscale_profiles" {
       })
     })), {})  # Default empty map if rules not provided
 
+    # Optional fixed date scaling
     fixed_date = optional(object({
       start    = string
       end      = string
       timezone = optional(string, "UTC")
     }))
 
+    # Optional recurrence (weekly/daily schedule)
     recurrence = optional(object({
       timezone = optional(string, "UTC")
       days     = list(string)
@@ -70,19 +74,19 @@ variable "autoscale_profiles" {
 }
 
 variable "autoscale_enable_telemetry" {
-  description = "Enable telemetry (handled via null_resource after removing modtm provider)"
+  description = "Enable telemetry (handled via null_resource)."
   type        = bool
   default     = true
 }
 
 variable "autoscale_enabled" {
-  description = "Whether autoscale setting is enabled"
+  description = "Whether autoscale setting is enabled."
   type        = bool
   default     = true
 }
 
 variable "autoscale_notification" {
-  description = "Notification block for autoscale (email/webhooks)"
+  description = "Notification block for autoscale (email/webhooks)."
   type = object({
     email = optional(object({
       send_to_subscription_administrator    = optional(bool, false)
@@ -99,7 +103,7 @@ variable "autoscale_notification" {
 }
 
 variable "autoscale_predictive" {
-  description = "Predictive autoscale configuration"
+  description = "Predictive autoscale configuration (optional)."
   type = object({
     scale_mode      = string
     look_ahead_time = optional(string)
@@ -109,7 +113,7 @@ variable "autoscale_predictive" {
 }
 
 variable "autoscale_tags" {
-  description = "Tags"
+  description = "Tags to assign to the autoscale setting."
   type        = map(string)
   nullable    = true
   default     = {}
