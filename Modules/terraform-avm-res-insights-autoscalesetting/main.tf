@@ -70,24 +70,14 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
-      # Recurrence block (Terraform Azure provider v3+)
+      # Recurrence block (directly contains days, hours, minutes, timezone)
       dynamic "recurrence" {
         for_each = contains(keys(profile.value), "recurrence") ? [profile.value.recurrence] : []
         content {
           timezone = lookup(recurrence.value, "timezone", "UTC")
-
-          dynamic "schedule" {
-            for_each = (
-              length(lookup(recurrence.value, "days", [])) > 0 &&
-              length(lookup(recurrence.value, "hours", [])) > 0 &&
-              length(lookup(recurrence.value, "minutes", [])) > 0
-            ) ? [recurrence.value] : []
-            content {
-              days    = schedule.value.days
-              hours   = schedule.value.hours
-              minutes = schedule.value.minutes
-            }
-          }
+          days     = lookup(recurrence.value, "days", [])
+          hours    = lookup(recurrence.value, "hours", [])
+          minutes  = lookup(recurrence.value, "minutes", [])
         }
       }
 
