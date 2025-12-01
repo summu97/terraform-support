@@ -27,10 +27,6 @@ output "cdn_profile_name" {
 # -------------------------
 # Disk Encryption Set Outputs
 # -------------------------
-output "des_resource" {
-  value = module.disk_encryption_set.resource
-}
-
 output "des_resource_id" {
   value = module.disk_encryption_set.resource_id
 }
