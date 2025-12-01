@@ -1,10 +1,10 @@
 // NOTE: Pros & Cons
 // Pros:
-// 1) Standard & trusted – Follows Microsoft’s recommended design, so it's reliable and clean.
-// 2) Reusable – Works for VMSS, App Services, etc., making autoscaling easy across all environments.
+// 1) Standard & trusted – Follows Microsoft’s recommended design, reliable and clean.
+// 2) Reusable – Works for VMSS, App Services, etc., making autoscaling easy across environments.
 // Cons:
-// 1) Not fully stable yet – It’s still pre-GA, so future versions may introduce breaking changes.
-// 2) Limited flexibility – You must follow AVM’s structure, so heavy customization can be harder.
+// 1) Pre-GA features – Future provider versions may introduce breaking changes.
+// 2) Limited customization – Must follow AVM structure; complex custom rules are harder.
 
 resource "random_integer" "deploy_sku" {
   min = 10000
@@ -13,8 +13,7 @@ resource "random_integer" "deploy_sku" {
 
 resource "random_uuid" "telemetry" {}
 
-# Optional telemetry via modtm removed due to unsupported arguments
-# Use null_resource as a placeholder for dependencies
+# Optional telemetry placeholder
 resource "null_resource" "telemetry_dep" {
   count = var.autoscale_enable_telemetry ? 1 : 0
 }
@@ -27,6 +26,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   enabled             = var.autoscale_enabled
   tags                = var.autoscale_tags
 
+  # Notification block (email/webhooks)
   dynamic "notification" {
     for_each = var.autoscale_notification == null ? [] : [var.autoscale_notification]
     content {
@@ -49,6 +49,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
     }
   }
 
+  # Autoscale profiles
   dynamic "profile" {
     for_each = var.autoscale_profiles
     content {
@@ -60,7 +61,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         maximum = profile.value.capacity.maximum
       }
 
-      # Fixed date block (optional)
+      # Fixed date (optional)
       dynamic "fixed_date" {
         for_each = contains(keys(profile.value), "fixed_date") ? [profile.value.fixed_date] : []
         content {
@@ -70,7 +71,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
-      # Recurrence block (directly contains days, hours, minutes, timezone)
+      # Recurrence (weekly/daily schedule)
       dynamic "recurrence" {
         for_each = contains(keys(profile.value), "recurrence") ? [profile.value.recurrence] : []
         content {
@@ -81,30 +82,24 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
+      # Scaling rules
       dynamic "rule" {
         for_each = lookup(profile.value, "rules", {})
         content {
           metric_trigger {
-            metric_name               = rule.value.metric_trigger.metric_name
-            metric_resource_id        = try(rule.value.metric_trigger.metric_resource_id, null)
-            operator                  = rule.value.metric_trigger.operator
-            statistic                 = rule.value.metric_trigger.statistic
-            time_aggregation          = rule.value.metric_trigger.time_aggregation
-            time_grain                = rule.value.metric_trigger.time_grain
-            time_window               = rule.value.metric_trigger.time_window
-            threshold                 = rule.value.metric_trigger.threshold
-            metric_namespace          = try(rule.value.metric_trigger.metric_namespace, null)
-            divide_by_instance_count  = try(rule.value.metric_trigger.divide_by_instance_count, null)
+            metric_name              = rule.value.metric_trigger.metric_name
+            metric_resource_id       = try(rule.value.metric_trigger.metric_resource_id, null)
+            operator                 = rule.value.metric_trigger.operator
+            statistic                = rule.value.metric_trigger.statistic
+            time_aggregation         = rule.value.metric_trigger.time_aggregation
+            time_grain               = rule.value.metric_trigger.time_grain
+            time_window              = rule.value.metric_trigger.time_window
+            threshold                = rule.value.metric_trigger.threshold
+            metric_namespace         = try(rule.value.metric_trigger.metric_namespace, null)
+            divide_by_instance_count = try(rule.value.metric_trigger.divide_by_instance_count, null)
 
-            # Dimension block
-            dynamic "dimension" {
-              for_each = try(rule.value.metric_trigger.dimensions, [])
-              content {
-                name     = dimension.value.name
-                operator = dimension.value.operator
-                values   = dimension.value.values
-              }
-            }
+            # Dimensions must be assigned directly as a list of objects
+            dimensions = try(rule.value.metric_trigger.dimensions, [])
           }
 
           scale_action {
@@ -118,6 +113,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
     }
   }
 
+  # Predictive scaling (optional)
   dynamic "predictive" {
     for_each = var.autoscale_predictive == null ? [] : [var.autoscale_predictive]
     content {
