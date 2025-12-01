@@ -36,7 +36,7 @@ module "cdn_profile" {
 # -------------------------
 # Disk Encryption Set Module
 # -------------------------
-module "desk_encryption_set" {
+module "disk_encryption_set" {
   source = "./Modules/disk_encryption_set"
 
   des_name                     = var.des_name
@@ -57,7 +57,7 @@ module "desk_encryption_set" {
 # -------------------------
 # Autoscale Module
 # -------------------------
-module "autoscale" {
+module "terraform-avm-res-insights-autoscalesetting" {
   source = "./Modules/terraform-avm-res-insights-autoscalesetting"
 
   autoscale_name               = var.autoscale_name
