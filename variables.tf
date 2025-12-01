@@ -205,10 +205,6 @@ variable "autoscale_name" {
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Resource group in which the autoscale setting will exist"
-  type        = string
-}
 
 variable "autoscale_target_resource_id" {
   description = "The resource id of the scalable resource to attach autoscale to"
