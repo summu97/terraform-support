@@ -230,7 +230,7 @@ variable "autoscale_profiles" {
         time_window            = string
         threshold              = number
         metric_namespace       = optional(string)
-        dimensions             = optional(map(object({
+        dimensions             = optional(list(object({
           name     = string
           operator = string
           values   = list(string)
