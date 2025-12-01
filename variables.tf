@@ -252,7 +252,7 @@ variable "autoscale_profiles" {
       timezone = optional(string, "UTC")
     }))
     recurrence = optional(object({
-      timezone = optional(string, "UTC", "UTC")
+      timezone = optional(string, "UTC")
       days     = list(string)   # Must be provided if recurrence block exists
       hours    = list(number)   # Must be provided if recurrence block exists
       minutes  = list(number)   # Must be provided if recurrence block exists
