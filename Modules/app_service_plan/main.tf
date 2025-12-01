@@ -7,9 +7,6 @@ resource "azurerm_service_plan" "asp" {
   sku_name = var.app_service_plan_size     # e.g., "S1", "P1v2"
   os_type  = var.app_service_plan_os       # "Linux" or "Windows"
 
-  # Optional: kind & reserved are inferred from os_type
-  kind     = var.app_service_plan_os == "Linux" ? "Linux" : "App"
-  reserved = var.app_service_plan_os == "Linux" ? true : false
 
   tags = var.app_service_plan_tags
 }
