@@ -25,6 +25,10 @@ resource "modtm_telemetry" "telemetry" {
   }
 }
 
+resource "null_resource" "telemetry_dep" {
+  count = var.autoscale_enable_telemetry ? 1 : 0
+}
+
 resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   name                = var.autoscale_name
   resource_group_name = var.resource_group_name
@@ -134,5 +138,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
     }
   }
 
-  depends_on = var.autoscale_enable_telemetry ? [modtm_telemetry.telemetry] : []
+  depends_on = [
+    null_resource.telemetry_dep
+  ]
 }
