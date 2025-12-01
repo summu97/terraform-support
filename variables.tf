@@ -327,11 +327,6 @@ variable "app_service_plan_location" {
   description = "Azure region for the App Service Plan."
 }
 
-variable "app_service_plan_tier" {
-  type        = string
-  description = "Pricing tier for the App Service Plan (e.g., Standard, Premium)."
-  default     = "Standard"
-}
 
 variable "app_service_plan_size" {
   type        = string
