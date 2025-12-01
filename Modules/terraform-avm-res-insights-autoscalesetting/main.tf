@@ -40,7 +40,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
       }
 
       dynamic "webhook" {
-        for_each = lookup(notification.value, "webhooks", []) 
+        for_each = lookup(notification.value, "webhooks", [])
         content {
           service_uri = webhook.value.service_uri
           properties  = lookup(webhook.value, "properties", {})
@@ -70,35 +70,43 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
-      # Recurrence block (correct schema for Terraform Azure provider)
+      # Recurrence block (Terraform Azure provider v3+)
       dynamic "recurrence" {
         for_each = contains(keys(profile.value), "recurrence") ? [profile.value.recurrence] : []
         content {
           timezone = lookup(recurrence.value, "timezone", "UTC")
-          schedule {
-            days    = recurrence.value.days
-            hours   = recurrence.value.hours
-            minutes = recurrence.value.minutes
+
+          dynamic "schedule" {
+            for_each = (
+              length(lookup(recurrence.value, "days", [])) > 0 &&
+              length(lookup(recurrence.value, "hours", [])) > 0 &&
+              length(lookup(recurrence.value, "minutes", [])) > 0
+            ) ? [recurrence.value] : []
+            content {
+              days    = schedule.value.days
+              hours   = schedule.value.hours
+              minutes = schedule.value.minutes
+            }
           }
         }
       }
 
       dynamic "rule" {
-        for_each = lookup(profile.value, "rules", {}) 
+        for_each = lookup(profile.value, "rules", {})
         content {
           metric_trigger {
-            metric_name            = rule.value.metric_trigger.metric_name
-            metric_resource_id     = try(rule.value.metric_trigger.metric_resource_id, null)
-            operator               = rule.value.metric_trigger.operator
-            statistic              = rule.value.metric_trigger.statistic
-            time_aggregation       = rule.value.metric_trigger.time_aggregation
-            time_grain             = rule.value.metric_trigger.time_grain
-            time_window            = rule.value.metric_trigger.time_window
-            threshold              = rule.value.metric_trigger.threshold
-            metric_namespace       = try(rule.value.metric_trigger.metric_namespace, null)
-            divide_by_instance_count = try(rule.value.metric_trigger.divide_by_instance_count, null)
+            metric_name               = rule.value.metric_trigger.metric_name
+            metric_resource_id        = try(rule.value.metric_trigger.metric_resource_id, null)
+            operator                  = rule.value.metric_trigger.operator
+            statistic                 = rule.value.metric_trigger.statistic
+            time_aggregation          = rule.value.metric_trigger.time_aggregation
+            time_grain                = rule.value.metric_trigger.time_grain
+            time_window               = rule.value.metric_trigger.time_window
+            threshold                 = rule.value.metric_trigger.threshold
+            metric_namespace          = try(rule.value.metric_trigger.metric_namespace, null)
+            divide_by_instance_count  = try(rule.value.metric_trigger.divide_by_instance_count, null)
 
-            # Dimension block (must be nested inside metric_trigger)
+            # Dimension block
             dynamic "dimension" {
               for_each = try(rule.value.metric_trigger.dimensions, [])
               content {
