@@ -40,7 +40,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
       }
 
       dynamic "webhook" {
-        for_each = lookup(notification.value, "webhooks", {}) 
+        for_each = lookup(notification.value, "webhooks", []) 
         content {
           service_uri = webhook.value.service_uri
           properties  = lookup(webhook.value, "properties", {})
@@ -70,12 +70,11 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
-      # Recurrence block (correct schema)
+      # Recurrence block (correct schema for Terraform Azure provider)
       dynamic "recurrence" {
         for_each = contains(keys(profile.value), "recurrence") ? [profile.value.recurrence] : []
         content {
-          frequency = "Week"
-          timezone  = lookup(recurrence.value, "timezone", "UTC")
+          timezone = lookup(recurrence.value, "timezone", "UTC")
           schedule {
             days    = recurrence.value.days
             hours   = recurrence.value.hours
@@ -101,7 +100,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
 
             # Dimension block (must be nested inside metric_trigger)
             dynamic "dimension" {
-              for_each = try(rule.value.metric_trigger.dimensions, {})
+              for_each = try(rule.value.metric_trigger.dimensions, [])
               content {
                 name     = dimension.value.name
                 operator = dimension.value.operator
