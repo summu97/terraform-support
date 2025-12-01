@@ -2,15 +2,15 @@
 # Redis Module Outputs
 # -------------------------
 output "redis_id" {
-  value = module.redis.redis_id
+  value = module.azure_redis_cache.redis_id
 }
 
 output "redis_hostname" {
-  value = module.redis.redis_hostname
+  value = module.azure_redis_cache.redis_hostname
 }
 
 output "redis_port" {
-  value = module.redis.redis_port
+  value = module.azure_redis_cache.redis_port
 }
 
 # -------------------------
