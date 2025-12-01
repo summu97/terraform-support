@@ -107,7 +107,6 @@ autoscale_profiles = {
           time_grain               = "PT1M"
           time_window              = "PT5M"
           threshold                = 30
-          dimensions               = []       # ✅ Empty list works for Terraform v3+
           divide_by_instance_count = false
         }
         scale_action = {
