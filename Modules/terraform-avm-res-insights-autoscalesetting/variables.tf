@@ -40,13 +40,14 @@ variable "autoscale_profiles" {
         time_window              = string
         threshold                = number
         metric_namespace         = optional(string)
+        # Keep as list for dynamic dimension blocks
         dimensions               = optional(list(object({
           name     = string
           operator = string
           values   = list(string)
-        })), [])  # Directly as list for v3+
+        })), [])
         divide_by_instance_count = optional(bool)
-      })
+      }))
 
       scale_action = object({
         cooldown  = string
