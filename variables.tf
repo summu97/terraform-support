@@ -205,6 +205,11 @@ variable "autoscale_name" {
   type        = string
 }
 
+variable "resource_group_name" {
+  description = "Resource group in which the autoscale setting will exist"
+  type        = string
+}
+
 variable "autoscale_target_resource_id" {
   description = "The resource id of the scalable resource to attach autoscale to"
   type        = string
@@ -234,7 +239,7 @@ variable "autoscale_profiles" {
           name     = string
           operator = string
           values   = list(string)
-        })))
+        })), [])
         divide_by_instance_count = optional(bool)
       })
 
@@ -244,23 +249,23 @@ variable "autoscale_profiles" {
         type      = string
         value     = string
       })
-    })))
+    })), {})
     fixed_date = optional(object({
       end      = string
       start    = string
       timezone = optional(string, "UTC")
     }))
     recurrence = optional(object({
-      timezone = optional(string, "UTC")
-      days     = list(string)
-      hours    = list(number)
-      minutes  = list(number)
+      timezone = optional(string, "UTC", "UTC")
+      days     = list(string)   # Must be provided if recurrence block exists
+      hours    = list(number)   # Must be provided if recurrence block exists
+      minutes  = list(number)   # Must be provided if recurrence block exists
     }))
   }))
 }
 
 variable "autoscale_enable_telemetry" {
-  description = "Enable telemetry resource"
+  description = "Enable telemetry (handled via null_resource after removing modtm provider)"
   type        = bool
   default     = true
 }
@@ -275,14 +280,14 @@ variable "autoscale_notification" {
   description = "Notification block for autoscale (email/webhooks)"
   type = object({
     email = optional(object({
-      send_to_subscription_administrator    = optional(bool)
-      send_to_subscription_co_administrator = optional(bool)
-      custom_emails                        = optional(list(string))
+      send_to_subscription_administrator    = optional(bool, false)
+      send_to_subscription_co_administrator = optional(bool, false)
+      custom_emails                        = optional(list(string), [])
     }))
     webhooks = optional(list(object({
       service_uri = string
-      properties  = optional(map(string))
-    })))
+      properties  = optional(map(string), {})
+    })), [])
   })
   nullable = true
   default  = null
@@ -302,8 +307,9 @@ variable "autoscale_tags" {
   description = "Tags"
   type        = map(string)
   nullable    = true
-  default     = null
+  default     = {}
 }
+
 
 #---------------------------
 # app_service_plan
