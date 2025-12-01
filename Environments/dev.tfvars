@@ -87,6 +87,7 @@ autoscale_profiles = {
           time_grain       = "PT1M"
           time_window      = "PT5M"
           threshold        = 70
+          dimensions       = []  # Optional
         }
         scale_action = {
           direction = "Increase"
@@ -105,6 +106,7 @@ autoscale_profiles = {
           time_grain       = "PT1M"
           time_window      = "PT5M"
           threshold        = 30
+          dimensions       = []  # Optional
         }
         scale_action = {
           direction = "Decrease"
@@ -114,18 +116,31 @@ autoscale_profiles = {
         }
       }
     }
+
+    # Optional recurrence example (weekly schedule)
+    recurrence = {
+      timezone = "UTC"
+      days     = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+      hours    = [9, 12, 15]
+      minutes  = [0]
+    }
   }
 }
 
 autoscale_enable_telemetry = true
 autoscale_enabled          = true
-autoscale_notification     = null
-autoscale_predictive       = null
+
+# Optional notifications (null or configure if needed)
+autoscale_notification = null
+
+# Optional predictive scaling (null or configure if needed)
+autoscale_predictive = null
 
 autoscale_tags = {
   environment = "dev"
   owner       = "devops"
 }
+
 # ====================================
 # App Service Plan
 # ====================================
