@@ -87,7 +87,7 @@ autoscale_profiles = {
           time_grain               = "PT1M"
           time_window              = "PT5M"
           threshold                = 70
-          dimensions               = []       # Required for Terraform v3+
+          dimensions               = []       # ✅ Empty list works for Terraform v3+
           divide_by_instance_count = false
         }
         scale_action = {
@@ -107,7 +107,7 @@ autoscale_profiles = {
           time_grain               = "PT1M"
           time_window              = "PT5M"
           threshold                = 30
-          dimensions               = []       # Required for Terraform v3+
+          dimensions               = []       # ✅ Empty list works for Terraform v3+
           divide_by_instance_count = false
         }
         scale_action = {
@@ -121,7 +121,7 @@ autoscale_profiles = {
 
     # Optional recurrence (weekly schedule)
     recurrence = {
-      timezone = "UTC"
+      timezone = "UTC"           # ✅ matches updated variables.tf
       days     = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
       hours    = [9, 12, 15]
       minutes  = [0]
@@ -131,7 +131,7 @@ autoscale_profiles = {
     fixed_date = {
       start    = "2025-12-01T00:00:00Z"
       end      = "2025-12-31T23:59:59Z"
-      timezone = "UTC"
+      timezone = "UTC"           # ✅ matches updated variables.tf
     }
   }
 }
