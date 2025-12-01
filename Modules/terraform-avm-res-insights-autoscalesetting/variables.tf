@@ -81,31 +81,37 @@ variable "autoscale_enabled" {
 
 variable "autoscale_notification" {
   description = "Notification block for autoscale (email/webhooks)"
-  type = optional(object({
+  type = object({
     email = optional(object({
-      send_to_subscription_administrator     = optional(bool, false)
-      send_to_subscription_co_administrator  = optional(bool, false)
-      custom_emails                          = optional(list(string), [])
+      send_to_subscription_administrator    = optional(bool)
+      send_to_subscription_co_administrator = optional(bool)
+      custom_emails                        = optional(list(string))
     }))
     webhooks = optional(map(object({
       service_uri = string
-      properties  = optional(map(string), {})
+      properties  = optional(map(string))
     })))
-  }), null)
-  default = null
+  })
+  nullable = true
+  default  = null
 }
+
 
 variable "autoscale_predictive" {
   description = "Predictive autoscale configuration"
-  type        = optional(object({
-    scale_mode     = string
+  type = object({
+    scale_mode      = string
     look_ahead_time = optional(string)
-  }), null)
-  default = null
+  })
+  nullable = true
+  default  = null
 }
+
 
 variable "autoscale_tags" {
   description = "Tags"
-  type        = optional(map(string), null)
+  type        = map(string)
+  nullable    = true
   default     = null
 }
+
