@@ -13,18 +13,8 @@ resource "random_integer" "deploy_sku" {
 
 resource "random_uuid" "telemetry" {}
 
-// Optional telemetry resource (modtm)
-resource "modtm_telemetry" "telemetry" {
-  count = var.autoscale_enable_telemetry ? 1 : 0
-
-  name        = "autoscale-telemetry-${random_uuid.telemetry.result}"
-  description = "Telemetry for autoscale setting created by module"
-  properties = {
-    source  = "terraform-avm-res-insights-autoscalesetting"
-    version = "0.1"
-  }
-}
-
+# Optional telemetry via modtm removed due to unsupported arguments
+# Use null_resource as a placeholder for dependencies
 resource "null_resource" "telemetry_dep" {
   count = var.autoscale_enable_telemetry ? 1 : 0
 }
@@ -50,7 +40,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
       }
 
       dynamic "webhook" {
-        for_each = lookup(notification.value, "webhooks", {})
+        for_each = lookup(notification.value, "webhooks", {}) 
         content {
           service_uri = webhook.value.service_uri
           properties  = lookup(webhook.value, "properties", {})
@@ -70,6 +60,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         maximum = profile.value.capacity.maximum
       }
 
+      # Fixed date block (optional)
       dynamic "fixed_date" {
         for_each = contains(keys(profile.value), "fixed_date") ? [profile.value.fixed_date] : []
         content {
@@ -79,14 +70,13 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         }
       }
 
+      # Recurrence block (correct schema)
       dynamic "recurrence" {
         for_each = contains(keys(profile.value), "recurrence") ? [profile.value.recurrence] : []
         content {
-          timezone = lookup(recurrence.value, "timezone", "UTC")
-
-          recurrence {
-            frequency = "Week"
-            // days/hours/minutes mapping
+          frequency = "Week"
+          timezone  = lookup(recurrence.value, "timezone", "UTC")
+          schedule {
             days    = recurrence.value.days
             hours   = recurrence.value.hours
             minutes = recurrence.value.minutes
@@ -95,7 +85,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
       }
 
       dynamic "rule" {
-        for_each = lookup(profile.value, "rules", {})
+        for_each = lookup(profile.value, "rules", {}) 
         content {
           metric_trigger {
             metric_name            = rule.value.metric_trigger.metric_name
@@ -109,6 +99,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
             metric_namespace       = try(rule.value.metric_trigger.metric_namespace, null)
             divide_by_instance_count = try(rule.value.metric_trigger.divide_by_instance_count, null)
 
+            # Dimension block (must be nested inside metric_trigger)
             dynamic "dimension" {
               for_each = try(rule.value.metric_trigger.dimensions, {})
               content {
