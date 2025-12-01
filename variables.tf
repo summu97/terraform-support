@@ -279,7 +279,7 @@ variable "autoscale_notification" {
       send_to_subscription_co_administrator = optional(bool)
       custom_emails                        = optional(list(string))
     }))
-    webhooks = optional(map(object({
+    webhooks = optional(list(object({
       service_uri = string
       properties  = optional(map(string))
     })))
