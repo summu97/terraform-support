@@ -140,11 +140,6 @@ variable "des_name" {
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Resource group name where the Disk Encryption Set will be created."
-  type        = string
-}
-
 variable "des_auto_key_rotation_enabled" {
   description = "Enable automatic key rotation for the Disk Encryption Set."
   type        = bool
