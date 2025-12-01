@@ -96,6 +96,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
             time_window        = rule.value.metric_trigger.time_window
             threshold          = rule.value.metric_trigger.threshold
             metric_namespace   = try(rule.value.metric_trigger.metric_namespace, null)
+          }
 
           scale_action {
             cooldown  = rule.value.scale_action.cooldown
