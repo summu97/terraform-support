@@ -82,7 +82,6 @@ module "app_service_plan" {
   app_service_plan_name                  = var.app_service_plan_name
   resource_group_name                    = var.resource_group_name
   app_service_plan_location              = var.app_service_plan_location
-  app_service_plan_tier                  = var.app_service_plan_tier
   app_service_plan_size                  = var.app_service_plan_size
   app_service_plan_os                    = var.app_service_plan_os
   app_service_plan_tags                  = var.app_service_plan_tags
