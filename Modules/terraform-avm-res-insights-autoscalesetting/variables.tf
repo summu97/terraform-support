@@ -52,17 +52,19 @@ variable "autoscale_profiles" {
         type      = string
         value     = string
       })
-    })), {})
+    })), {})  # Default empty map if rules not provided
+
     fixed_date = optional(object({
-      end      = string
       start    = string
+      end      = string
       timezone = optional(string, "UTC")
     }))
+
     recurrence = optional(object({
       timezone = optional(string, "UTC")
-      days     = list(string)   # Must be provided if recurrence block exists
-      hours    = list(number)   # Must be provided if recurrence block exists
-      minutes  = list(number)   # Must be provided if recurrence block exists
+      days     = list(string)
+      hours    = list(number)
+      minutes  = list(number)
     }))
   }))
 }
@@ -85,7 +87,7 @@ variable "autoscale_notification" {
     email = optional(object({
       send_to_subscription_administrator    = optional(bool, false)
       send_to_subscription_co_administrator = optional(bool, false)
-      custom_emails                        = optional(list(string), [])
+      custom_emails                         = optional(list(string), [])
     }))
     webhooks = optional(list(object({
       service_uri = string
