@@ -10,7 +10,6 @@ resource "azurerm_redis_cache" "one" {
   family              = var.redis_family
   sku_name            = var.redis_pricing_tier
 
-  enable_non_ssl_port = local.is_premium ? false : var.redis_enable_non_ssl_port
 
   # Premium Tier Enhancements
   # --------------------------
