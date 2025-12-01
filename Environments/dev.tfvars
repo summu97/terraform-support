@@ -8,7 +8,7 @@ resource_group_name = "dev-rg"
 # Redis Cache Module Variables
 # ====================================
 redis_name          = "dev-redis-cache"
-redis_location      = ""
+redis_location      = "East US"
 redis_pricing_tier  = "Standard"  # Basic / Standard / Premium
 redis_family        = "C"
 redis_capacity      = 1
@@ -30,7 +30,7 @@ redis_tags = {
 # CDN Profile Module Variables
 # ====================================
 cdn_profile_name    = "dev-cdn-profile"
-cdn_location        = ""
+cdn_location        = "East US"
 cdn_pricing_tier    = "Standard_Microsoft"
 
 cdn_tags = {
@@ -42,7 +42,7 @@ cdn_tags = {
 # Disk Encryption Set Module Variables
 # ====================================
 des_name                = "des-dev-001"
-des_location                = ""
+des_location                = "East US"
 des_key_vault_key_id        = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-kv-dev/providers/Microsoft.KeyVault/vaults/my-kv/keys/mykey"
 des_managed_hsm_key_id      = null
 des_key_vault_resource_id   = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-kv-dev/providers/Microsoft.KeyVault/vaults/my-kv"
