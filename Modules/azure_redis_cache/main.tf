@@ -5,11 +5,12 @@ locals {
 resource "azurerm_redis_cache" "one" {
   name                = var.redis_name
   location            = var.redis_location
-  resource_group_name       = var.resource_group_name
+  resource_group_name = var.resource_group_name
   capacity            = var.redis_capacity
   family              = var.redis_family
   sku_name            = var.redis_pricing_tier
-  enable_non_ssl_port = var.redis_enable_non_ssl_port if !local.is_premium
+
+  enable_non_ssl_port = local.is_premium ? false : var.redis_enable_non_ssl_port
 
   # Premium Tier Enhancements
   # --------------------------
@@ -21,15 +22,14 @@ resource "azurerm_redis_cache" "one" {
   shard_count = local.is_premium ? var.redis_shard_count : null
 
   # 3. Data Persistence (Premium Only)
-dynamic "redis_configuration" {
-  for_each = local.is_premium ? [1] : []
-  content {
-    rdb_backup_enabled           = var.redis_rdb_backup_enabled
-    rdb_backup_frequency         = var.redis_rdb_backup_frequency
-    rdb_storage_connection_string = var.redis_rdb_storage_connection_string
+  dynamic "redis_configuration" {
+    for_each = local.is_premium ? [1] : []
+    content {
+      rdb_backup_enabled            = var.redis_rdb_backup_enabled
+      rdb_backup_frequency          = var.redis_rdb_backup_frequency
+      rdb_storage_connection_string = var.redis_rdb_storage_connection_string
+    }
   }
-}
-
 
   # 4. Virtual Network Integration (Premium Only)
   subnet_id = local.is_premium ? var.redis_subnet_id : null
