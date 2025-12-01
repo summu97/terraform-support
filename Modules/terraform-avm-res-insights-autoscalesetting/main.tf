@@ -87,19 +87,25 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         for_each = lookup(profile.value, "rules", {})
         content {
           metric_trigger {
-            metric_name              = rule.value.metric_trigger.metric_name
-            metric_resource_id       = try(rule.value.metric_trigger.metric_resource_id, null)
-            operator                 = rule.value.metric_trigger.operator
-            statistic                = rule.value.metric_trigger.statistic
-            time_aggregation         = rule.value.metric_trigger.time_aggregation
-            time_grain               = rule.value.metric_trigger.time_grain
-            time_window              = rule.value.metric_trigger.time_window
-            threshold                = rule.value.metric_trigger.threshold
-            metric_namespace         = try(rule.value.metric_trigger.metric_namespace, null)
-            divide_by_instance_count = try(rule.value.metric_trigger.divide_by_instance_count, null)
+            metric_name        = rule.value.metric_trigger.metric_name
+            metric_resource_id = try(rule.value.metric_trigger.metric_resource_id, null)
+            operator           = rule.value.metric_trigger.operator
+            statistic          = rule.value.metric_trigger.statistic
+            time_aggregation   = rule.value.metric_trigger.time_aggregation
+            time_grain         = rule.value.metric_trigger.time_grain
+            time_window        = rule.value.metric_trigger.time_window
+            threshold          = rule.value.metric_trigger.threshold
+            metric_namespace   = try(rule.value.metric_trigger.metric_namespace, null)
+          }
 
-            # Dimensions must be assigned directly as a list of objects
-            dimensions = try(rule.value.metric_trigger.dimensions, [])
+          # Only use dimension blocks here
+          dynamic "dimension" {
+            for_each = try(rule.value.metric_trigger.dimensions, [])
+            content {
+              name     = dimension.value.name
+              operator = dimension.value.operator
+              values   = dimension.value.values
+            }
           }
 
           scale_action {
