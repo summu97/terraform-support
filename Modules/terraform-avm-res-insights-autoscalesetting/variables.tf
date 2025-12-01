@@ -38,7 +38,7 @@ variable "autoscale_profiles" {
         time_window            = string
         threshold              = number
         metric_namespace       = optional(string)
-        dimensions             = optional(map(object({
+        dimensions             = optional(list(object({
           name     = string
           operator = string
           values   = list(string)
@@ -68,7 +68,7 @@ variable "autoscale_profiles" {
 }
 
 variable "autoscale_enable_telemetry" {
-  description = "Enable telemetry resource"
+  description = "Enable telemetry (handled via null_resource after removing modtm provider)"
   type        = bool
   default     = true
 }
@@ -87,7 +87,7 @@ variable "autoscale_notification" {
       send_to_subscription_co_administrator = optional(bool)
       custom_emails                        = optional(list(string))
     }))
-    webhooks = optional(map(object({
+    webhooks = optional(list(object({
       service_uri = string
       properties  = optional(map(string))
     })))
@@ -95,7 +95,6 @@ variable "autoscale_notification" {
   nullable = true
   default  = null
 }
-
 
 variable "autoscale_predictive" {
   description = "Predictive autoscale configuration"
@@ -107,11 +106,9 @@ variable "autoscale_predictive" {
   default  = null
 }
 
-
 variable "autoscale_tags" {
   description = "Tags"
   type        = map(string)
   nullable    = true
-  default     = null
+  default     = {}
 }
-
