@@ -80,15 +80,14 @@ autoscale_profiles = {
     rules = {
       cpu_scale_out = {
         metric_trigger = {
-          metric_name              = "CpuPercentage"
-          operator                 = "GreaterThan"
-          statistic                = "Average"
-          time_aggregation         = "Average"
-          time_grain               = "PT1M"
-          time_window              = "PT5M"
-          threshold                = 70
-          dimensions               = []        # Optional
-          divide_by_instance_count = false     # Optional
+          metric_name      = "CpuPercentage"
+          operator         = "GreaterThan"
+          statistic        = "Average"
+          time_aggregation = "Average"
+          time_grain       = "PT1M"
+          time_window      = "PT5M"
+          threshold        = 70
+          # dimensions removed here
         }
         scale_action = {
           direction = "Increase"
@@ -100,15 +99,14 @@ autoscale_profiles = {
 
       cpu_scale_in = {
         metric_trigger = {
-          metric_name              = "CpuPercentage"
-          operator                 = "LessThan"
-          statistic                = "Average"
-          time_aggregation         = "Average"
-          time_grain               = "PT1M"
-          time_window              = "PT5M"
-          threshold                = 30
-          dimensions               = []        # Optional
-          divide_by_instance_count = false     # Optional
+          metric_name      = "CpuPercentage"
+          operator         = "LessThan"
+          statistic        = "Average"
+          time_aggregation = "Average"
+          time_grain       = "PT1M"
+          time_window      = "PT5M"
+          threshold        = 30
+          # dimensions removed here
         }
         scale_action = {
           direction = "Decrease"
@@ -127,7 +125,7 @@ autoscale_profiles = {
       minutes  = [0]
     }
 
-    # Optional fixed_date (can remove if not needed)
+    # Optional fixed_date
     fixed_date = {
       start    = "2025-12-01T00:00:00Z"
       end      = "2025-12-31T23:59:59Z"
@@ -138,17 +136,14 @@ autoscale_profiles = {
 
 autoscale_enable_telemetry = true
 autoscale_enabled          = true
-
-# Optional notifications (null or configure if needed)
-autoscale_notification = null
-
-# Optional predictive scaling (null or configure if needed)
-autoscale_predictive = null
+autoscale_notification      = null
+autoscale_predictive        = null
 
 autoscale_tags = {
   environment = "dev"
   owner       = "devops"
 }
+
 
 
 
