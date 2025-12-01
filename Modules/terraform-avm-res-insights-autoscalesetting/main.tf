@@ -97,17 +97,6 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
             threshold          = rule.value.metric_trigger.threshold
             metric_namespace   = try(rule.value.metric_trigger.metric_namespace, null)
 
-            # ✅ Dimension block moved inside metric_trigger
-            dynamic "dimension" {
-              for_each = try(rule.value.metric_trigger.dimensions, [])
-              content {
-                name     = dimension.value.name
-                operator = dimension.value.operator
-                values   = dimension.value.values
-              }
-            }
-          }
-
           scale_action {
             cooldown  = rule.value.scale_action.cooldown
             direction = rule.value.scale_action.direction
