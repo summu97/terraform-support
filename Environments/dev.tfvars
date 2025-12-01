@@ -152,7 +152,9 @@ app_service_plan_location = "East US"
 app_service_plan_name     = "dev-appserviceplan"
 app_service_plan_tier     = "Basic"
 app_service_plan_size     = "B1"
-app_service_plan_os_type  = "Linux"
+app_service_plan_os       = "Linux"
+
 app_service_plan_tags = {
   environment = "dev"
 }
+
