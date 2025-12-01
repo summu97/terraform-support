@@ -6,6 +6,7 @@ This repository contains reusable Terraform modules for deploying Azure resource
 - CDN Profile
 - Disk Encryption Set
 - Autoscale Setting
+- app_service_plan
 
 Modules are independent but can be orchestrated together through `main.tf`.
 
