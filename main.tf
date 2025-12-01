@@ -84,6 +84,6 @@ module "app_service_plan" {
   app_service_plan_location              = var.app_service_plan_location
   app_service_plan_tier                  = var.app_service_plan_tier
   app_service_plan_size                  = var.app_service_plan_size
-  app_service_plan_os_type               = var.app_service_plan_os_type
+  app_service_plan_os                    = var.app_service_plan_os_type
   app_service_plan_tags                  = var.app_service_plan_tags
 }
