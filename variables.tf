@@ -205,6 +205,10 @@ variable "autoscale_name" {
   type        = string
 }
 
+variable "resource_group_name" {
+  description = "Resource group in which the autoscale setting will exist."
+  type        = string
+}
 
 variable "autoscale_target_resource_id" {
   description = "The resource ID of the scalable resource to attach autoscale to."
@@ -222,33 +226,41 @@ variable "autoscale_profiles" {
     })
 
     # Scaling rules (optional)
-    rules = optional(map(object({
-      metric_trigger = object({
-        metric_name              = string
-        metric_resource_id       = optional(string)
-        operator                 = string
-        statistic                = string
-        time_aggregation         = string
-        time_grain               = string
-        time_window              = string
-        threshold                = number
-        metric_namespace         = optional(string)
-        # Keep as list for dynamic dimension blocks
-        dimensions               = optional(list(object({
-          name     = string
-          operator = string
-          values   = list(string)
-        })), [])
-        divide_by_instance_count = optional(bool)
-      }))
+    rules = optional(
+      map(object({
+        metric_trigger = object({
+          metric_name              = string
+          metric_resource_id       = optional(string)
+          operator                 = string
+          statistic                = string
+          time_aggregation         = string
+          time_grain               = string
+          time_window              = string
+          threshold                = number
+          metric_namespace         = optional(string)
 
-      scale_action = object({
-        cooldown  = string
-        direction = string
-        type      = string
-        value     = string
-      })
-    })), {})  # Default empty map if rules not provided
+          # Optional dimensions for dynamic blocks
+          dimensions = optional(
+            list(object({
+              name     = string
+              operator = string
+              values   = list(string)
+            })),
+            []
+          )
+
+          divide_by_instance_count = optional(bool)
+        })
+
+        scale_action = object({
+          cooldown  = string
+          direction = string
+          type      = string
+          value     = string
+        })
+      })),
+      {} # Default empty map if rules not provided
+    )
 
     # Optional fixed date scaling
     fixed_date = optional(object({
@@ -287,10 +299,13 @@ variable "autoscale_notification" {
       send_to_subscription_co_administrator = optional(bool, false)
       custom_emails                         = optional(list(string), [])
     }))
-    webhooks = optional(list(object({
-      service_uri = string
-      properties  = optional(map(string), {})
-    })), [])
+    webhooks = optional(
+      list(object({
+        service_uri = string
+        properties  = optional(map(string), {})
+      })),
+      []
+    )
   })
   nullable = true
   default  = null
