@@ -10,7 +10,6 @@ module "azure_redis_cache" {
   redis_pricing_tier                  = var.redis_pricing_tier
   redis_capacity                      = var.redis_capacity
   redis_family                        = var.redis_family
-  redis_pricing_tier                  = var.redis_pricing_tier
   redis_enable_non_ssl_port           = var.redis_enable_non_ssl_port
   redis_zones                         = var.redis_zones
   redis_shard_count                   = var.redis_shard_count
