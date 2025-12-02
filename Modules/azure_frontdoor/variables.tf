@@ -3,11 +3,6 @@ variable "frontdoor_name" {
   type        = string
 }
 
-variable "frontdoor_location" {
-  description = "Azure location for resource group"
-  type        = string
-  default     = "Global"
-}
 
 variable "resource_group_name" {
   description = "Resource Group name to create/use"
