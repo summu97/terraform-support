@@ -20,9 +20,8 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
 
   name                     = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
-  host_name                = each.value.host_name
 
-  # Removed unsupported session_affinity_enabled and WAF link
+  # host_name removed: automatically assigned
 }
 
 # ---------------------------------------------------------
@@ -35,13 +34,11 @@ resource "azurerm_cdn_frontdoor_origin_group" "this" {
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
   session_affinity_enabled = false
 
-  # Required: Load Balancing (supported attributes only)
   load_balancing {
-    sample_size                 = 4
-    successful_samples_required = 3
+    sample_size                 = lookup(each.value.load_balancing_settings, "sample_size", 4)
+    successful_samples_required = lookup(each.value.load_balancing_settings, "successful_samples_required", 3)
   }
 
-  # Health Probe
   health_probe {
     interval_in_seconds = 30
     path                = lookup(each.value, "health_probe_path", "/")
@@ -58,12 +55,12 @@ resource "azurerm_cdn_frontdoor_origin" "backend" {
   name                          = "${each.value.name}-origin"
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.key].id
 
-  # Currently only first backend is supported, extend with for_each if multiple origins required
-  host_name  = each.value.backends[0].address
-  http_port  = lookup(each.value.backends[0], "http_port", 80)
-  https_port = lookup(each.value.backends[0], "https_port", 443)
-  priority   = lookup(each.value.backends[0], "priority", 1)
-  weight     = lookup(each.value.backends[0], "weight", 50)
+  host_name                       = each.value.backends[0].address
+  http_port                       = lookup(each.value.backends[0], "http_port", 80)
+  https_port                      = lookup(each.value.backends[0], "https_port", 443)
+  priority                         = lookup(each.value.backends[0], "priority", 1)
+  weight                           = lookup(each.value.backends[0], "weight", 50)
+  certificate_name_check_enabled   = true
 }
 
 # ---------------------------------------------------------
@@ -74,14 +71,9 @@ resource "azurerm_cdn_frontdoor_route" "this" {
 
   name = each.value.name
 
-  cdn_frontdoor_endpoint_ids = [
-    for fe_name in each.value.frontend_endpoints :
-    azurerm_cdn_frontdoor_endpoint.this[fe_name].id
-  ]
+  cdn_frontdoor_endpoint_id = azurerm_cdn_frontdoor_endpoint.this[each.value.frontend_endpoints[0]].id
+  cdn_frontdoor_origin_ids  = [azurerm_cdn_frontdoor_origin.backend[each.value.forwarding_configuration.backend_pool_name].id]
 
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.forwarding_configuration.backend_pool_name].id
-
-  https_redirect      = true
   supported_protocols = each.value.accepted_protocols
   patterns_to_match   = each.value.patterns_to_match
   forwarding_protocol = "MatchRequest"
