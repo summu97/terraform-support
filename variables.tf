@@ -349,42 +349,105 @@ variable "app_service_plan_tags" {
 #---------------------------
 # azure_frontdoor
 #---------------------------
+# Front Door Profile – Basic Settings
+
 variable "frontdoor_name" {
-  type = string
-  description = "Base name for Front Door"
-  default = "tf-frontdoor"
+  description = "Name of the Azure Front Door profile."
+  type        = string
 }
 
 variable "frontdoor_sku" {
-  type = string
-  description = "Front Door SKU"
-  default = "Standard_AzureFrontDoor"
+  description = "Front Door SKU. Options: Standard_AzureFrontDoor, Premium_AzureFrontDoor."
+  type        = string
+  default     = "Standard_AzureFrontDoor"
 }
 
 variable "frontdoor_tags" {
-  type = map(string)
-  default = {
-    created_by = "terraform"
-    environment = "dev"
-  }
+  description = "Resource tags applied to the Front Door profile."
+  type        = map(string)
+  default     = {}
 }
+
+
+# Frontend Endpoints
 
 variable "frontend_endpoints" {
-  type = list(any)
+  description = <<EOT
+List of Frontend Endpoints.
+
+Each item example:
+{
+  name                                 = "frontend1"
+  host_name                            = "www.example.com"
+  session_affinity_enabled             = false
+  web_application_firewall_policy_link_id = "/subscriptions/.../waf-policy-id"  # optional
+}
+EOT
+
+  type = list(object({
+    name                                = string
+    host_name                           = string
+    session_affinity_enabled            = optional(bool, false)
+    web_application_firewall_policy_link_id = optional(string, "")
+  }))
+
   default = []
 }
+
+
+# Backend Pools
 
 variable "frontdoor_backend_pools" {
-  type = list(any)
+  description = "Definition for backend pools and health probe settings."
+
+  type = list(object({
+    name     = string
+
+    backends = list(object({
+      address       = string
+      http_port     = optional(number, 80)
+      https_port    = optional(number, 443)
+      priority      = optional(number, 1)
+      weight        = optional(number, 50)
+      host_header   = optional(string, "")
+    }))
+
+    health_probe_path         = optional(string, "/")
+    health_probe_protocol     = optional(string, "Https")
+    load_balancing_settings   = optional(map(any), {})
+  }))
+
   default = []
 }
+
+
+
+# Routes (Link Frontend -> Backend Pool)
 
 variable "frontdoor_routes" {
-  type = list(any)
+  description = "Routing rules mapping frontend endpoints to backend pools."
+
+  type = list(object({
+    name               = string
+    frontend_endpoints = list(string)        # list of frontend names
+    accepted_protocols = list(string)        # e.g., ["Http", "Https"]
+    patterns_to_match  = list(string)        # e.g., ["/*"]
+
+    forwarding_configuration = object({
+      backend_pool_name       = string
+      cache_configuration     = optional(map(any), {})
+      custom_forwarding_path  = optional(string, "")
+    })
+  }))
+
   default = []
 }
 
+
+# Diagnostics / Logging
+
 variable "frontdoor_diagnostic_log_analytics_workspace_id" {
-  type = string
-  default = ""
+  description = "Log Analytics Workspace Resource ID for diagnostic logging (optional)."
+  type        = string
+  default     = ""
 }
