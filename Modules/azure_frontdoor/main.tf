@@ -1,10 +1,10 @@
 # Create CDN Front Door Profile (Standard/Premium)
 resource "azurerm_cdn_frontdoor_profile" "this" {
-  name                = var.name
+  name                = var.frontdoor_name
   resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = var.sku
-  tags                = var.tags
+  location            = var.frontdoor_location
+  sku                 = var.frontdoor_sku
+  tags                = var.frontdoor_tags
 
   # recommended lifecycle rule to avoid accidental deletion
   lifecycle {
@@ -14,14 +14,14 @@ resource "azurerm_cdn_frontdoor_profile" "this" {
 
 # Frontdoor endpoint (the actual routing endpoint)
 resource "azurerm_cdn_frontdoor_endpoint" "this" {
-  name                = "${var.name}-endpoint"
+  name                = "${var.frontdoor_name}-endpoint"
   profile_name        = azurerm_cdn_frontdoor_profile.this.name
   resource_group_name = var.resource_group_name
   origin_host_header  = "" # left blank to use backend host header, can be overridden in backend config
   origin_path         = ""
 
   dynamic "origin" {
-    for_each = var.backend_pools
+    for_each = var.frontdoor_backend_pools
     content {
       name = origin.value.name
       host_name = origin.value.backends[0].address
@@ -35,7 +35,7 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
   }
 
   dynamic "routing_rule" {
-    for_each = var.routes
+    for_each = var.frontdoor_routes
     content {
       name = routing_rule.value.name
       accepted_protocols = routing_rule.value.accepted_protocols
@@ -60,11 +60,11 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
 
 # Optional diagnostic settings
 resource "azurerm_monitor_diagnostic_setting" "this" {
-  count = length(var.diagnostic_log_analytics_workspace_id) > 0 ? 1 : 0
+  count = length(var.frontdoor_diagnostic_log_analytics_workspace_id) > 0 ? 1 : 0
 
-  name               = "${var.name}-diag"
+  name               = "${var.frontdoor_name}-diag"
   target_resource_id = azurerm_cdn_frontdoor_profile.this.id
-  log_analytics_workspace_id = var.diagnostic_log_analytics_workspace_id
+  log_analytics_workspace_id = var.frontdoor_diagnostic_log_analytics_workspace_id
 
   log {
     category = "FrontdoorAccessLog"
