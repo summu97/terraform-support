@@ -160,7 +160,6 @@ app_service_plan_tags = {
 # ====================================
 # Azure Frontdoor
 # ====================================
-# Front Door Profile
 frontdoor_name = "fd-dev-app"
 frontdoor_sku  = "Standard_AzureFrontDoor"
 
@@ -173,10 +172,8 @@ frontdoor_tags = {
 # Frontend Endpoints
 frontend_endpoints = [
   {
-    name                              = "dev-frontend"
-    host_name                         = "dev.example.com"
-    session_affinity_enabled          = false
-    web_application_firewall_policy_link_id = ""  # optional
+    name      = "dev-frontend"
+    host_name = "dev.example.com"
   }
 ]
 
@@ -204,12 +201,11 @@ frontdoor_backend_pools = [
       }
     ]
 
-    health_probe_path       = "/"
-    health_probe_protocol   = "Https"
+    health_probe_path     = "/"
+    health_probe_protocol = "Https"
     load_balancing_settings = {
       sample_size                 = 4
       successful_samples_required = 2
-      additional_latency_in_ms    = 0
     }
   }
 ]
