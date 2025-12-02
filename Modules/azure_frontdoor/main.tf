@@ -68,9 +68,14 @@ resource "azurerm_cdn_frontdoor_origin" "backend" {
 resource "azurerm_cdn_frontdoor_route" "this" {
   for_each = { for route in var.frontdoor_routes : route.name => route }
 
-  name                         = each.value.name
-  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.this[each.value.frontend_endpoints[0]].id
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.forwarding_configuration.backend_pool_name].id
+  name                      = each.value.name
+  cdn_frontdoor_endpoint_id = azurerm_cdn_frontdoor_endpoint.this[each.value.frontend_endpoints[0]].id
+
+  # Use origin IDs from backend pool(s)
+  cdn_frontdoor_origin_ids = [
+    for backend in azurerm_cdn_frontdoor_origin.backend :
+    backend.id if backend.cdn_frontdoor_origin_group_id == azurerm_cdn_frontdoor_origin_group.this[each.value.forwarding_configuration.backend_pool_name].id
+  ]
 
   supported_protocols = each.value.accepted_protocols
   patterns_to_match   = each.value.patterns_to_match
@@ -86,6 +91,7 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   link_to_default_domain = true
   enabled                = true
 }
+
 
 # ---------------------------------------------------------
 # Diagnostic Settings (Optional)
