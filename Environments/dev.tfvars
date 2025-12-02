@@ -163,8 +163,8 @@ app_service_plan_tags = {
 # ---------------------------------------------------------
 # Front Door Basic Settings
 # ---------------------------------------------------------
-frontdoor_name       = "fd-dev-app"
-frontdoor_sku        = "Standard_AzureFrontDoor"
+frontdoor_name = "fd-dev-app"
+frontdoor_sku  = "Standard_AzureFrontDoor"
 
 frontdoor_tags = {
   environment = "dev"
@@ -208,8 +208,8 @@ frontdoor_backend_pools = [
       }
     ]
 
-    health_probe_path     = "/"
-    health_probe_protocol = "Https"
+    health_probe_path       = "/"
+    health_probe_protocol   = "Https"
     load_balancing_settings = {
       sample_size                 = 4
       successful_samples_required = 2
@@ -229,8 +229,8 @@ frontdoor_routes = [
 
     forwarding_configuration = {
       backend_pool_name      = "dev-backendpool"
-      cache_configuration    = {}
-      custom_forwarding_path = ""
+      cache_configuration    = {} # optional
+      custom_forwarding_path = "" # optional
     }
   }
 ]
