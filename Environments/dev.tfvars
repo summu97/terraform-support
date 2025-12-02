@@ -77,8 +77,8 @@ autoscale_profiles = {
       maximum = 2
     }
 
-    rules = [
-      {
+    rules = {
+      cpu_scale_out = {
         metric_trigger = {
           metric_name              = "CpuPercentage"
           metric_resource_id       = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
@@ -96,8 +96,9 @@ autoscale_profiles = {
           value     = "1"
           cooldown  = "PT5M"
         }
-      },
-      {
+      }
+
+      cpu_scale_in = {
         metric_trigger = {
           metric_name              = "CpuPercentage"
           metric_resource_id       = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
@@ -116,7 +117,7 @@ autoscale_profiles = {
           cooldown  = "PT5M"
         }
       }
-    ]
+    }
 
     # Optional recurrence (weekly schedule)
     recurrence = {
