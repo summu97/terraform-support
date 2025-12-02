@@ -356,11 +356,6 @@ variable "frontdoor_name" {
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Name of the Resource Group in which Front Door will be created."
-  type        = string
-}
-
 variable "frontdoor_sku" {
   description = "Front Door SKU. Options: Standard_AzureFrontDoor, Premium_AzureFrontDoor."
   type        = string
