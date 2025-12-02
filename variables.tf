@@ -345,3 +345,52 @@ variable "app_service_plan_tags" {
   description = "Tags for the App Service Plan."
   default     = {}
 }
+
+#---------------------------
+# azure_frontdoor
+#---------------------------
+variable "frontdoor_name" {
+  type = string
+  description = "Base name for Front Door"
+  default = "tf-frontdoor"
+}
+
+variable "frontdoor_location" {
+  type = string
+  description = "Location - typically Global for front door"
+  default = "Global"
+}
+
+variable "frontdoor_sku" {
+  type = string
+  description = "Front Door SKU"
+  default = "Standard_AzureFrontDoor"
+}
+
+variable "frontdoor_tags" {
+  type = map(string)
+  default = {
+    created_by = "terraform"
+    environment = "dev"
+  }
+}
+
+variable "frontend_endpoints" {
+  type = list(any)
+  default = []
+}
+
+variable "frontdoor_backend_pools" {
+  type = list(any)
+  default = []
+}
+
+variable "frontdoor_routes" {
+  type = list(any)
+  default = []
+}
+
+variable "frontdoor_diagnostic_log_analytics_workspace_id" {
+  type = string
+  default = ""
+}
