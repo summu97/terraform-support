@@ -205,7 +205,6 @@ variable "autoscale_name" {
   type        = string
 }
 
-
 variable "autoscale_target_resource_id" {
   description = "The resource ID of the scalable resource to attach autoscale to."
   type        = string
@@ -223,10 +222,10 @@ variable "autoscale_profiles" {
 
     # Scaling rules (optional)
     rules = optional(
-      map(object({
+      list(object({
         metric_trigger = object({
           metric_name        = string
-          metric_resource_id = optional(string)
+          metric_resource_id = string
           operator           = string
           statistic          = string
           time_aggregation   = string
@@ -234,7 +233,6 @@ variable "autoscale_profiles" {
           time_window        = string
           threshold          = number
           metric_namespace   = optional(string)
-
           divide_by_instance_count = optional(bool)
         })
 
@@ -245,19 +243,19 @@ variable "autoscale_profiles" {
           value     = string
         })
       })),
-      {} # Default empty map if rules not provided
+      [] # Default empty list if rules not provided
     )
 
     # Optional fixed date scaling
     fixed_date = optional(object({
       start    = string
       end      = string
-      timezone = optional(string, "UTC") # ✅ only type + default
+      timezone = optional(string, "UTC")
     }))
 
     # Optional recurrence (weekly/daily schedule)
     recurrence = optional(object({
-      timezone = optional(string, "UTC") # ✅ only type + default
+      timezone = optional(string, "UTC")
       days     = list(string)
       hours    = list(number)
       minutes  = list(number)
@@ -313,6 +311,7 @@ variable "autoscale_tags" {
   nullable    = true
   default     = {}
 }
+
 
 #---------------------------
 # app_service_plan
