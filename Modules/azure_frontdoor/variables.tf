@@ -32,18 +32,14 @@ List of Frontend Endpoints.
 
 Each item example:
 {
-  name                                 = "frontend1"
-  host_name                            = "www.example.com"
-  session_affinity_enabled             = false
-  web_application_firewall_policy_link_id = "/subscriptions/.../waf-policy-id"  # optional
+  name      = "frontend1"
+  host_name = "www.example.com"
 }
 EOT
 
   type = list(object({
-    name                                 = string
-    host_name                            = string
-    session_affinity_enabled             = optional(bool, false)
-    web_application_firewall_policy_link_id = optional(string, "")
+    name      = string
+    host_name = string
   }))
 
   default = []
@@ -56,15 +52,15 @@ variable "frontdoor_backend_pools" {
   description = "Definition for backend pools and health probe settings."
 
   type = list(object({
-    name     = string
+    name = string
 
     backends = list(object({
-      address       = string
-      http_port     = optional(number, 80)
-      https_port    = optional(number, 443)
-      priority      = optional(number, 1)
-      weight        = optional(number, 50)
-      host_header   = optional(string, "")
+      address     = string
+      http_port   = optional(number, 80)
+      https_port  = optional(number, 443)
+      priority    = optional(number, 1)
+      weight      = optional(number, 50)
+      host_header = optional(string, "")
     }))
 
     health_probe_path       = optional(string, "/")
@@ -72,7 +68,6 @@ variable "frontdoor_backend_pools" {
     load_balancing_settings = optional(map(any), {
       sample_size                 = 4
       successful_samples_required = 3
-      additional_latency_in_ms    = 0
     })
   }))
 
@@ -92,9 +87,9 @@ variable "frontdoor_routes" {
     patterns_to_match  = list(string)        # e.g., ["/*"]
 
     forwarding_configuration = object({
-      backend_pool_name       = string
-      cache_configuration     = optional(map(any), {})
-      custom_forwarding_path  = optional(string, "")
+      backend_pool_name      = string
+      cache_configuration    = optional(map(any), {})
+      custom_forwarding_path = optional(string, "")
     })
   }))
 
