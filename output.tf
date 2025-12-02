@@ -53,13 +53,3 @@ output "app_service_plan_id" {
   value = module.app_service_plan.id
 }
 
-# -------------------------
-# frontdoor
-# -------------------------
-output "frontdoor_profile_id" {
-  value = module.frontdoor.profile_id
-}
-
-output "frontdoor_endpoint_hostname" {
-  value = module.frontdoor.endpoint_hostname
-}
