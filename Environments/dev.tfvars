@@ -161,7 +161,6 @@ app_service_plan_tags = {
 # Azure Frontdoor
 # ====================================
 frontdoor_name        = "fd-dev-app"
-resource_group_name   = "rg-dev-frontdoor"
 frontdoor_sku         = "Standard_AzureFrontDoor"
 
 frontdoor_tags = {
