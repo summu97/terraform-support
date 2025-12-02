@@ -160,8 +160,11 @@ app_service_plan_tags = {
 # ====================================
 # Azure Frontdoor
 # ====================================
-frontdoor_name = "fd-dev-app"
-frontdoor_sku  = "Standard_AzureFrontDoor"
+# ---------------------------------------------------------
+# Front Door Basic Settings
+# ---------------------------------------------------------
+frontdoor_name       = "fd-dev-app"
+frontdoor_sku        = "Standard_AzureFrontDoor"
 
 frontdoor_tags = {
   environment = "dev"
@@ -169,7 +172,9 @@ frontdoor_tags = {
   owner       = "dev-team"
 }
 
+# ---------------------------------------------------------
 # Frontend Endpoints
+# ---------------------------------------------------------
 frontend_endpoints = [
   {
     name      = "dev-frontend"
@@ -177,25 +182,29 @@ frontend_endpoints = [
   }
 ]
 
+# ---------------------------------------------------------
 # Backend Pools
+# ---------------------------------------------------------
 frontdoor_backend_pools = [
   {
     name = "dev-backendpool"
 
     backends = [
       {
-        address   = "dev-app1.example.internal"
-        http_port = 80
-        https_port = 443
-        priority  = 1
-        weight    = 50
+        address     = "dev-app1.example.internal"
+        http_port   = 80
+        https_port  = 443
+        priority    = 1
+        weight      = 50
+        host_header = "dev-app1.example.internal"
       },
       {
-        address   = "dev-app2.example.internal"
-        http_port = 80
-        https_port = 443
-        priority  = 1
-        weight    = 50
+        address     = "dev-app2.example.internal"
+        http_port   = 80
+        https_port  = 443
+        priority    = 1
+        weight      = 50
+        host_header = "dev-app2.example.internal"
       }
     ]
 
@@ -208,7 +217,9 @@ frontdoor_backend_pools = [
   }
 ]
 
+# ---------------------------------------------------------
 # Routes
+# ---------------------------------------------------------
 frontdoor_routes = [
   {
     name               = "dev-route"
@@ -224,5 +235,7 @@ frontdoor_routes = [
   }
 ]
 
+# ---------------------------------------------------------
 # Diagnostics / Logging
+# ---------------------------------------------------------
 frontdoor_diagnostic_log_analytics_workspace_id = ""
