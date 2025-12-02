@@ -21,14 +21,8 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
   name                     = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
   host_name                = each.value.host_name
-  session_affinity_enabled = lookup(each.value, "session_affinity_enabled", false)
 
-  dynamic "web_application_firewall_policy_link" {
-    for_each = each.value.web_application_firewall_policy_link_id != "" ? [1] : []
-    content {
-      id = each.value.web_application_firewall_policy_link_id
-    }
-  }
+  # Removed unsupported session_affinity_enabled and WAF link
 }
 
 # ---------------------------------------------------------
@@ -41,11 +35,10 @@ resource "azurerm_cdn_frontdoor_origin_group" "this" {
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
   session_affinity_enabled = false
 
-  # Required: Load Balancing
+  # Required: Load Balancing (supported attributes only)
   load_balancing {
     sample_size                 = 4
     successful_samples_required = 3
-    additional_latency_in_ms    = 0
   }
 
   # Health Probe
@@ -64,11 +57,13 @@ resource "azurerm_cdn_frontdoor_origin" "backend" {
 
   name                          = "${each.value.name}-origin"
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.key].id
-  host_name                     = each.value.backends[0].address
-  http_port                     = lookup(each.value.backends[0], "http_port", 80)
-  https_port                    = lookup(each.value.backends[0], "https_port", 443)
-  priority                       = lookup(each.value.backends[0], "priority", 1)
-  weight                         = lookup(each.value.backends[0], "weight", 50)
+
+  # Currently only first backend is supported, extend with for_each if multiple origins required
+  host_name  = each.value.backends[0].address
+  http_port  = lookup(each.value.backends[0], "http_port", 80)
+  https_port = lookup(each.value.backends[0], "https_port", 443)
+  priority   = lookup(each.value.backends[0], "priority", 1)
+  weight     = lookup(each.value.backends[0], "weight", 50)
 }
 
 # ---------------------------------------------------------
@@ -116,8 +111,10 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
     category = "FrontdoorAccessLog"
   }
 
-  metric {
+  enabled_metric {
     category = "AllMetrics"
-    enabled  = true
+    retention_policy {
+      enabled = false
+    }
   }
 }
