@@ -84,8 +84,7 @@ resource "azurerm_cdn_frontdoor_route" "this" {
     azurerm_cdn_frontdoor_endpoint.this[fe_name].id
   ]
 
-  cdn_frontdoor_origin_group_id =
-    azurerm_cdn_frontdoor_origin_group.this[each.value.forwarding_configuration.backend_pool_name].id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.forwarding_configuration.backend_pool_name].id
 
   https_redirect      = true
   supported_protocols = each.value.accepted_protocols
