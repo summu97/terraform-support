@@ -1,106 +1,118 @@
-# ---------------------------------------------------------
-# Front Door Profile – Basic Settings
-# ---------------------------------------------------------
-variable "frontdoor_name" {
-  description = "Name of the Azure Front Door profile."
-  type        = string
-}
-
 variable "resource_group_name" {
-  description = "Name of the Resource Group in which Front Door will be created."
   type        = string
+  description = "Name of the resource group"
 }
 
-variable "frontdoor_sku" {
-  description = "Front Door SKU. Options: Standard_AzureFrontDoor, Premium_AzureFrontDoor."
+variable "location" {
   type        = string
-  default     = "Standard_AzureFrontDoor"
+  description = "Azure location"
+  default     = "East US"
 }
 
-variable "frontdoor_tags" {
-  description = "Resource tags applied to the Front Door profile."
+variable "custom_name" {
+  type        = string
+  description = "Custom name for the Front Door"
+  default     = ""
+}
+
+variable "name_prefix" { type = string }
+variable "client_name" { type = string }
+variable "environment" { type = string }
+variable "stack" { type = string }
+variable "name_suffix" { type = string }
+
+variable "sku_name" {
+  type        = string
+  description = "Front Door SKU (Standard_AzureFrontDoor or Premium_AzureFrontDoor)"
+  default     = "Premium_AzureFrontDoor"
+}
+
+variable "extra_tags" {
   type        = map(string)
+  description = "Tags to attach"
   default     = {}
 }
 
-# ---------------------------------------------------------
-# Frontend Endpoints
-# ---------------------------------------------------------
-variable "frontend_endpoints" {
-  description = <<EOT
-List of Frontend Endpoints.
-
-Each item example:
-{
-  name      = "frontend1"
-  host_name = "www.example.com"
+variable "identity" {
+  type = map(any)
+  default = {
+    type = "SystemAssigned"
+  }
 }
-EOT
 
+variable "custom_domains" {
   type = list(object({
     name      = string
     host_name = string
+    tls = optional(object({
+      certificate_type         = optional(string, "ManagedCertificate")
+      minimum_tls_version      = optional(string, "TLS12")
+      cdn_frontdoor_secret_id  = optional(string, null)
+    }), {})
   }))
-
   default = []
 }
 
-# ---------------------------------------------------------
-# Backend Pools
-# ---------------------------------------------------------
-variable "frontdoor_backend_pools" {
-  description = "Definition for backend pools and health probe settings."
-
+variable "endpoints" {
   type = list(object({
-    name = string
+    name    = string
+    enabled = optional(bool, true)
+  }))
+  default = []
+}
 
-    backends = list(object({
-      address     = string
+variable "origin_groups" {
+  type = list(object({
+    name                                        = string
+    session_affinity_enabled                    = optional(bool, true)
+    restore_traffic_time_to_healed_or_new_endpoint_in_minutes = optional(number, 10)
+    health_probe = optional(object({
+      interval_in_seconds = number
+      path                = string
+      protocol            = string
+      request_type        = string
+    }))
+    load_balancing = optional(object({
+      additional_latency_in_milliseconds = number
+      sample_size                        = number
+      successful_samples_required        = number
+    }))
+    origins = list(object({
+      host_name   = string
       http_port   = optional(number, 80)
       https_port  = optional(number, 443)
       priority    = optional(number, 1)
-      weight      = optional(number, 50)
-      host_header = optional(string, "")
+      weight      = optional(number, 1)
     }))
-
-    health_probe_path       = optional(string, "/")
-    health_probe_protocol   = optional(string, "Https")
-    load_balancing_settings = optional(map(any), {
-      sample_size                 = 4
-      successful_samples_required = 3
-    })
   }))
-
   default = []
 }
 
-# ---------------------------------------------------------
-# Routes (Link Frontend -> Backend Pool)
-# ---------------------------------------------------------
-variable "frontdoor_routes" {
-  description = "Routing rules mapping frontend endpoints to backend pools."
-
+variable "origins" {
   type = list(object({
-    name               = string
-    frontend_endpoints = list(string)        # list of frontend names
-    accepted_protocols = list(string)        # e.g., ["Http", "Https"]
-    patterns_to_match  = list(string)        # e.g., ["/*"]
-
-    forwarding_configuration = object({
-      backend_pool_name      = string
-      cache_configuration    = optional(map(any), {})
-      custom_forwarding_path = optional(string, "")
-    })
+    name                          = string
+    origin_group_name             = string
+    host_name                     = string
+    http_port                      = optional(number, 80)
+    https_port                     = optional(number, 443)
+    priority                       = optional(number, 1)
+    weight                         = optional(number, 1)
+    enabled                        = optional(bool, true)
+    certificate_name_check_enabled = optional(bool, true)
   }))
-
   default = []
 }
 
-# ---------------------------------------------------------
-# Diagnostics / Logging
-# ---------------------------------------------------------
-variable "frontdoor_diagnostic_log_analytics_workspace_id" {
-  description = "Log Analytics Workspace Resource ID for diagnostic logging (optional)."
-  type        = string
-  default     = ""
+variable "routes" {
+  type = list(object({
+    name                   = string
+    endpoint_name          = string
+    origin_names          = list(string)
+    origin_group_name      = string
+    forwarding_protocol    = optional(string, "HttpsOnly")
+    https_redirect_enabled = optional(bool, true)
+    patterns_to_match      = optional(list(string), ["/*"])
+    supported_protocols    = optional(list(string), ["Https"])
+  }))
+  default = []
 }
