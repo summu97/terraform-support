@@ -84,12 +84,6 @@ variable "frontdoor_routes" {
   default = []
 }
 
-variable "enable_endpoint_https" {
-  description = "Automatically enable HTTPS on endpoints (true = use managed cert)"
-  type    = bool
-  default = true
-}
-
 # Optional: diagnostics / log analytics workspace id
 variable "frontdoor_diagnostic_log_analytics_workspace_id" {
   description = "Optional Log Analytics workspace resource id to send diagnostics to"
