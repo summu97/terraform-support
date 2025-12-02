@@ -184,20 +184,18 @@ frontdoor_backend_pools = [
 
     backends = [
       {
-        address     = "dev-app1.example.internal"
-        http_port   = 80
-        https_port  = 443
-        priority    = 1
-        weight      = 50
-        host_header = "dev-app1.example.internal"
+        address   = "dev-app1.example.internal"
+        http_port = 80
+        https_port = 443
+        priority  = 1
+        weight    = 50
       },
       {
-        address     = "dev-app2.example.internal"
-        http_port   = 80
-        https_port  = 443
-        priority    = 1
-        weight      = 50
-        host_header = "dev-app2.example.internal"
+        address   = "dev-app2.example.internal"
+        http_port = 80
+        https_port = 443
+        priority  = 1
+        weight    = 50
       }
     ]
 
