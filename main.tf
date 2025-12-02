@@ -95,7 +95,6 @@ module "frontdoor" {
 
   frontdoor_name                = var.frontdoor_name
   resource_group_name = var.resource_group_name
-  frontdoor_location            = var.frontdoor_location
   frontdoor_sku                 = var.frontdoor_sku
   frontdoor_tags                = var.frontdoor_tags
 
