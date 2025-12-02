@@ -1,9 +1,23 @@
-output "profile_id" {
-  description = "Front Door profile resource id"
-  value       = azurerm_frontdoor_profile.this.id
+output "frontdoor_profile" {
+  value = azurerm_cdn_frontdoor_profile.main
 }
 
-output "endpoint_hostname" {
-  description = "Front Door endpoint host name"
-  value = [for fe in azurerm_frontdoor_endpoint.this : fe.value.host_name]
+output "custom_domains" {
+  value = azurerm_cdn_frontdoor_custom_domain.main
+}
+
+output "endpoints" {
+  value = azurerm_cdn_frontdoor_endpoint.main
+}
+
+output "origin_groups" {
+  value = azurerm_cdn_frontdoor_origin_group.main
+}
+
+output "origins" {
+  value = azurerm_cdn_frontdoor_origin.main
+}
+
+output "routes" {
+  value = azurerm_cdn_frontdoor_route.main
 }
