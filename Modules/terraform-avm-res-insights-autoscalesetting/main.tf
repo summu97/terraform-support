@@ -13,7 +13,6 @@ resource "random_integer" "deploy_sku" {
 
 resource "random_uuid" "telemetry" {}
 
-# Optional telemetry placeholder
 resource "null_resource" "telemetry_dep" {
   count = var.autoscale_enable_telemetry ? 1 : 0
 }
@@ -31,7 +30,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
     for_each = var.autoscale_notification == null ? [] : [var.autoscale_notification]
     content {
       dynamic "email" {
-        for_each = lookup(notification.value, "email", null) == null ? [] : [lookup(notification.value, "email")]
+        for_each = lookup(notification.value, "email", []) 
         content {
           send_to_subscription_administrator    = lookup(email.value, "send_to_subscription_administrator", false)
           send_to_subscription_co_administrator = lookup(email.value, "send_to_subscription_co_administrator", false)
@@ -77,18 +76,18 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
         content {
           timezone = lookup(recurrence.value, "timezone", "UTC")
           days     = lookup(recurrence.value, "days", [])
-          hours    = lookup(recurrence.value, "hours", [])
-          minutes  = lookup(recurrence.value, "minutes", [])
+          hours    = [lookup(recurrence.value, "hours", [0])[0]]   # Ensure single-item list
+          minutes  = [lookup(recurrence.value, "minutes", [0])[0]] # Ensure single-item list
         }
       }
 
       # Scaling rules
       dynamic "rule" {
-        for_each = lookup(profile.value, "rules", {})
+        for_each = lookup(profile.value, "rules", [])
         content {
           metric_trigger {
             metric_name        = rule.value.metric_trigger.metric_name
-            metric_resource_id = try(rule.value.metric_trigger.metric_resource_id, null)
+            metric_resource_id = rule.value.metric_trigger.metric_resource_id # Must not be null
             operator           = rule.value.metric_trigger.operator
             statistic          = rule.value.metric_trigger.statistic
             time_aggregation   = rule.value.metric_trigger.time_aggregation
@@ -113,7 +112,7 @@ resource "azurerm_monitor_autoscale_setting" "monitor_autoscale_setting" {
   dynamic "predictive" {
     for_each = var.autoscale_predictive == null ? [] : [var.autoscale_predictive]
     content {
-      scale_mode     = predictive.value.scale_mode
+      scale_mode      = predictive.value.scale_mode
       look_ahead_time = try(predictive.value.look_ahead_time, null)
     }
   }
