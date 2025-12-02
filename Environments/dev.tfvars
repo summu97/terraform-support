@@ -81,7 +81,7 @@ autoscale_profiles = {
       {
         metric_trigger = {
           metric_name              = "CpuPercentage"
-          metric_resource_id       = autoscale_target_resource_id
+          metric_resource_id       = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
           operator                 = "GreaterThan"
           statistic                = "Average"
           time_aggregation         = "Average"
@@ -100,7 +100,7 @@ autoscale_profiles = {
       {
         metric_trigger = {
           metric_name              = "CpuPercentage"
-          metric_resource_id       = autoscale_target_resource_id
+          metric_resource_id       = "/subscriptions/<SUBSCRIPTION-ID>/resourceGroups/rg-dev-app/providers/Microsoft.Web/serverfarms/dev-appserviceplan"
           operator                 = "LessThan"
           statistic                = "Average"
           time_aggregation         = "Average"
