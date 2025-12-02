@@ -157,3 +157,54 @@ app_service_plan_tags = {
   environment = "dev"
 }
 
+# ====================================
+# Azure Frontdoor
+# ====================================
+frontdoor_name          = "tf-frontdoor-dev"
+frontdoor_location      = "Global"
+frontdoor_sku           = "Standard_AzureFrontDoor"
+
+frontdoor_tags = {
+  created_by  = "terraform"
+  environment = "dev"
+}
+
+frontend_endpoints = [
+  {
+    name             = "dev-frontend"
+    host_name        = "dev.example.com"
+    session_affinity = false
+  }
+]
+
+frontdoor_backend_pools = [
+  {
+    name = "dev-backendpool"
+    backends = [
+      {
+        address     = "dev-app-1.example.com"
+        host_header = "dev-app-1.example.com"
+        priority    = 1
+        weight      = 50
+      },
+      {
+        address     = "dev-app-2.example.com"
+        host_header = "dev-app-2.example.com"
+        priority    = 1
+        weight      = 50
+      }
+    ]
+  }
+]
+
+frontdoor_routes = [
+  {
+    name               = "dev-route"
+    frontend_endpoints = ["dev-frontend"]
+    backend_pool       = "dev-backendpool"
+    patterns_to_match  = ["/*"]
+    https_redirect     = true
+  }
+]
+
+frontdoor_diagnostic_log_analytics_workspace_id = ""
