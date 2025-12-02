@@ -183,7 +183,7 @@ frontend_endpoints = [
 ]
 
 # ---------------------------------------------------------
-# Backend Pools
+# Backend Pools / Origin Groups
 # ---------------------------------------------------------
 frontdoor_backend_pools = [
   {
@@ -218,7 +218,7 @@ frontdoor_backend_pools = [
 ]
 
 # ---------------------------------------------------------
-# Routes
+# Routes (Link Frontend -> Origin Group)
 # ---------------------------------------------------------
 frontdoor_routes = [
   {
@@ -228,9 +228,9 @@ frontdoor_routes = [
     patterns_to_match  = ["/*"]
 
     forwarding_configuration = {
-      backend_pool_name      = "dev-backendpool"
-      cache_configuration    = {} # optional
-      custom_forwarding_path = "" # optional
+      backend_pool_name      = "dev-backendpool" # This maps to the origin group
+      cache_configuration    = {}                # optional
+      custom_forwarding_path = ""                # optional
     }
   }
 ]
