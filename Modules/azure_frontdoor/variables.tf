@@ -1,5 +1,6 @@
+# ---------------------------------------------------------
 # Front Door Profile – Basic Settings
-
+# ---------------------------------------------------------
 variable "frontdoor_name" {
   description = "Name of the Azure Front Door profile."
   type        = string
@@ -22,9 +23,9 @@ variable "frontdoor_tags" {
   default     = {}
 }
 
-
+# ---------------------------------------------------------
 # Frontend Endpoints
-
+# ---------------------------------------------------------
 variable "frontend_endpoints" {
   description = <<EOT
 List of Frontend Endpoints.
@@ -39,18 +40,18 @@ Each item example:
 EOT
 
   type = list(object({
-    name                                = string
-    host_name                           = string
-    session_affinity_enabled            = optional(bool, false)
+    name                                 = string
+    host_name                            = string
+    session_affinity_enabled             = optional(bool, false)
     web_application_firewall_policy_link_id = optional(string, "")
   }))
 
   default = []
 }
 
-
+# ---------------------------------------------------------
 # Backend Pools
-
+# ---------------------------------------------------------
 variable "frontdoor_backend_pools" {
   description = "Definition for backend pools and health probe settings."
 
@@ -66,18 +67,21 @@ variable "frontdoor_backend_pools" {
       host_header   = optional(string, "")
     }))
 
-    health_probe_path         = optional(string, "/")
-    health_probe_protocol     = optional(string, "Https")
-    load_balancing_settings   = optional(map(any), {})
+    health_probe_path       = optional(string, "/")
+    health_probe_protocol   = optional(string, "Https")
+    load_balancing_settings = optional(map(any), {
+      sample_size                 = 4
+      successful_samples_required = 3
+      additional_latency_in_ms    = 0
+    })
   }))
 
   default = []
 }
 
-
-
+# ---------------------------------------------------------
 # Routes (Link Frontend -> Backend Pool)
-
+# ---------------------------------------------------------
 variable "frontdoor_routes" {
   description = "Routing rules mapping frontend endpoints to backend pools."
 
@@ -97,9 +101,9 @@ variable "frontdoor_routes" {
   default = []
 }
 
-
+# ---------------------------------------------------------
 # Diagnostics / Logging
-
+# ---------------------------------------------------------
 variable "frontdoor_diagnostic_log_analytics_workspace_id" {
   description = "Log Analytics Workspace Resource ID for diagnostic logging (optional)."
   type        = string
