@@ -355,12 +355,6 @@ variable "frontdoor_name" {
   default = "tf-frontdoor"
 }
 
-variable "frontdoor_location" {
-  type = string
-  description = "Location - typically Global for front door"
-  default = "Global"
-}
-
 variable "frontdoor_sku" {
   type = string
   description = "Front Door SKU"
