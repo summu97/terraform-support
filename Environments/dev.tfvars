@@ -160,8 +160,9 @@ app_service_plan_tags = {
 # ====================================
 # Azure Frontdoor
 # ====================================
-frontdoor_name        = "fd-dev-app"
-frontdoor_sku         = "Standard_AzureFrontDoor"
+# Front Door Profile
+frontdoor_name = "fd-dev-app"
+frontdoor_sku  = "Standard_AzureFrontDoor"
 
 frontdoor_tags = {
   environment = "dev"
@@ -172,9 +173,10 @@ frontdoor_tags = {
 # Frontend Endpoints
 frontend_endpoints = [
   {
-    name         = "dev-frontend"
-    host_name    = "dev.example.com"
-    session_affinity_enabled = false
+    name                              = "dev-frontend"
+    host_name                         = "dev.example.com"
+    session_affinity_enabled          = false
+    web_application_firewall_policy_link_id = ""  # optional
   }
 ]
 
@@ -182,6 +184,7 @@ frontend_endpoints = [
 frontdoor_backend_pools = [
   {
     name = "dev-backendpool"
+
     backends = [
       {
         address     = "dev-app1.example.internal"
@@ -200,11 +203,13 @@ frontdoor_backend_pools = [
         host_header = "dev-app2.example.internal"
       }
     ]
-    health_probe_path     = "/"
-    health_probe_protocol = "Https"
+
+    health_probe_path       = "/"
+    health_probe_protocol   = "Https"
     load_balancing_settings = {
-      sample_size        = 4
-      successful_samples = 2
+      sample_size                 = 4
+      successful_samples_required = 2
+      additional_latency_in_ms    = 0
     }
   }
 ]
@@ -218,11 +223,12 @@ frontdoor_routes = [
     patterns_to_match  = ["/*"]
 
     forwarding_configuration = {
-      backend_pool_name = "dev-backendpool"
-      cache_configuration = {}
+      backend_pool_name      = "dev-backendpool"
+      cache_configuration    = {}
       custom_forwarding_path = ""
     }
   }
 ]
 
+# Diagnostics / Logging
 frontdoor_diagnostic_log_analytics_workspace_id = ""
