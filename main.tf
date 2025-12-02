@@ -87,20 +87,3 @@ module "app_service_plan" {
   app_service_plan_tags                  = var.app_service_plan_tags
 }
 
-# -------------------------
-# azure_frontdoor
-# -------------------------
-module "frontdoor" {
-  source = "./Modules/azure_frontdoor"
-
-  frontdoor_name                = var.frontdoor_name
-  resource_group_name = var.resource_group_name
-  frontdoor_sku                 = var.frontdoor_sku
-  frontdoor_tags                = var.frontdoor_tags
-
-  frontend_endpoints = var.frontend_endpoints
-  frontdoor_backend_pools      = var.frontdoor_backend_pools
-  frontdoor_routes             = var.frontdoor_routes
-
-  frontdoor_diagnostic_log_analytics_workspace_id = var.frontdoor_diagnostic_log_analytics_workspace_id
-}
