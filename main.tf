@@ -93,15 +93,15 @@ module "app_service_plan" {
 module "frontdoor" {
   source = "./Modules/azure_frontdoor"
 
-  name                = var.frontdoor_name
+  frontdoor_name                = var.frontdoor_name
   resource_group_name = var.resource_group_name
-  location            = var.location
-  sku                 = var.frontdoor_sku
-  tags                = var.tags
+  frontdoor_location            = var.frontdoor_location
+  frontdoor_sku                 = var.frontdoor_sku
+  frontdoor_tags                = var.frontdoor_tags
 
   frontend_endpoints = var.frontend_endpoints
-  backend_pools      = var.backend_pools
-  routes             = var.routes
+  frontdoor_backend_pools      = var.frontdoor_backend_pools
+  frontdoor_routes             = var.frontdoor_routes
 
-  diagnostic_log_analytics_workspace_id = var.diagnostic_log_analytics_workspace_id
+  frontdoor_diagnostic_log_analytics_workspace_id = var.frontdoor_diagnostic_log_analytics_workspace_id
 }
