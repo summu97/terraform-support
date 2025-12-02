@@ -2,8 +2,7 @@
 resource "azurerm_cdn_frontdoor_profile" "this" {
   name                = var.frontdoor_name
   resource_group_name = var.resource_group_name
-  location            = var.frontdoor_location
-  sku                 = var.frontdoor_sku
+  sku_name                 = var.frontdoor_sku
   tags                = var.frontdoor_tags
 
   # recommended lifecycle rule to avoid accidental deletion
