@@ -20,8 +20,7 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
 
   name                     = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
-
-  # host_name removed: automatically assigned
+  # host_name is automatically assigned and cannot be set manually
 }
 
 # ---------------------------------------------------------
@@ -69,8 +68,7 @@ resource "azurerm_cdn_frontdoor_origin" "backend" {
 resource "azurerm_cdn_frontdoor_route" "this" {
   for_each = { for route in var.frontdoor_routes : route.name => route }
 
-  name = each.value.name
-
+  name                      = each.value.name
   cdn_frontdoor_endpoint_id = azurerm_cdn_frontdoor_endpoint.this[each.value.frontend_endpoints[0]].id
   cdn_frontdoor_origin_ids  = [azurerm_cdn_frontdoor_origin.backend[each.value.forwarding_configuration.backend_pool_name].id]
 
@@ -105,8 +103,6 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
 
   enabled_metric {
     category = "AllMetrics"
-    retention_policy {
-      enabled = false
-    }
+    # removed unsupported retention_policy block
   }
 }
