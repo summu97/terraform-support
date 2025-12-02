@@ -86,3 +86,22 @@ module "app_service_plan" {
   app_service_plan_os                    = var.app_service_plan_os
   app_service_plan_tags                  = var.app_service_plan_tags
 }
+
+# -------------------------
+# azure_frontdoor
+# -------------------------
+module "frontdoor" {
+  source = "./Modules/azure_frontdoor"
+
+  name                = var.frontdoor_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sku                 = var.frontdoor_sku
+  tags                = var.tags
+
+  frontend_endpoints = var.frontend_endpoints
+  backend_pools      = var.backend_pools
+  routes             = var.routes
+
+  diagnostic_log_analytics_workspace_id = var.diagnostic_log_analytics_workspace_id
+}
