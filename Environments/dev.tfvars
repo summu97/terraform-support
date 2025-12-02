@@ -160,50 +160,69 @@ app_service_plan_tags = {
 # ====================================
 # Azure Frontdoor
 # ====================================
-frontdoor_name          = "tf-frontdoor-dev"
-frontdoor_location      = "Global"
-frontdoor_sku           = "Standard_AzureFrontDoor"
+frontdoor_name        = "fd-dev-app"
+resource_group_name   = "rg-dev-frontdoor"
+frontdoor_sku         = "Standard_AzureFrontDoor"
 
 frontdoor_tags = {
-  created_by  = "terraform"
   environment = "dev"
+  created_by  = "terraform"
+  owner       = "dev-team"
 }
 
+# Frontend Endpoints
 frontend_endpoints = [
   {
-    name             = "dev-frontend"
-    host_name        = "dev.example.com"
-    session_affinity = false
+    name         = "dev-frontend"
+    host_name    = "dev.example.com"
+    session_affinity_enabled = false
   }
 ]
 
+# Backend Pools
 frontdoor_backend_pools = [
   {
     name = "dev-backendpool"
     backends = [
       {
-        address     = "dev-app-1.example.com"
-        host_header = "dev-app-1.example.com"
+        address     = "dev-app1.example.internal"
+        http_port   = 80
+        https_port  = 443
         priority    = 1
         weight      = 50
+        host_header = "dev-app1.example.internal"
       },
       {
-        address     = "dev-app-2.example.com"
-        host_header = "dev-app-2.example.com"
+        address     = "dev-app2.example.internal"
+        http_port   = 80
+        https_port  = 443
         priority    = 1
         weight      = 50
+        host_header = "dev-app2.example.internal"
       }
     ]
+    health_probe_path     = "/"
+    health_probe_protocol = "Https"
+    load_balancing_settings = {
+      sample_size        = 4
+      successful_samples = 2
+    }
   }
 ]
 
+# Routes
 frontdoor_routes = [
   {
     name               = "dev-route"
     frontend_endpoints = ["dev-frontend"]
-    backend_pool       = "dev-backendpool"
+    accepted_protocols = ["Http", "Https"]
     patterns_to_match  = ["/*"]
-    https_redirect     = true
+
+    forwarding_configuration = {
+      backend_pool_name = "dev-backendpool"
+      cache_configuration = {}
+      custom_forwarding_path = ""
+    }
   }
 ]
 
