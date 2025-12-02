@@ -1,9 +1,9 @@
-variable "name" {
+variable "frontdoor_name" {
   description = "Base name for Front Door profile"
   type        = string
 }
 
-variable "location" {
+variable "frontdoor_location" {
   description = "Azure location for resource group"
   type        = string
   default     = "Global"
@@ -14,13 +14,13 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "sku" {
+variable "frontdoor_sku" {
   description = "Front Door SKU: Standard_AzureFrontDoor, Premium_AzureFrontDoor or Standard"
   type        = string
   default     = "Standard_AzureFrontDoor"
 }
 
-variable "tags" {
+variable "frontdoor_tags" {
   description = "Tags map"
   type        = map(string)
   default     = {}
@@ -48,7 +48,7 @@ EOT
 }
 
 # Backend pools (list)
-variable "backend_pools" {
+variable "frontdoor_backend_pools" {
   description = "Backends and health settings"
   type = list(object({
     name                    = string
@@ -68,7 +68,7 @@ variable "backend_pools" {
 }
 
 # Routing rules
-variable "routes" {
+variable "frontdoor_routes" {
   description = "Routing rules (link frontends -> backend pools)"
   type = list(object({
     name               = string
@@ -91,7 +91,7 @@ variable "enable_endpoint_https" {
 }
 
 # Optional: diagnostics / log analytics workspace id
-variable "diagnostic_log_analytics_workspace_id" {
+variable "frontdoor_diagnostic_log_analytics_workspace_id" {
   description = "Optional Log Analytics workspace resource id to send diagnostics to"
   type        = string
   default     = ""
