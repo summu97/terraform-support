@@ -96,7 +96,7 @@ autoscale_profiles = {
           value     = "1"
           cooldown  = "PT5M"
         }
-      }
+      },
 
       cpu_scale_in = {
         metric_trigger = {
