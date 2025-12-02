@@ -77,7 +77,7 @@ autoscale_profiles = {
       maximum = 2
     }
 
-    rules = {
+    rules = [
       cpu_scale_out = {
         metric_trigger = {
           metric_name              = "CpuPercentage"
@@ -117,7 +117,7 @@ autoscale_profiles = {
           cooldown  = "PT5M"
         }
       }
-    }
+    ]
 
     # Optional recurrence (weekly schedule)
     recurrence = {
