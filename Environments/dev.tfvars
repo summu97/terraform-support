@@ -77,17 +77,17 @@ autoscale_profiles = {
       maximum = 2
     }
 
-    rules = {
-      cpu_scale_out = {
+    rules = [
+      {
         metric_trigger = {
           metric_name              = "CpuPercentage"
+          metric_resource_id       = autoscale_target_resource_id
           operator                 = "GreaterThan"
           statistic                = "Average"
           time_aggregation         = "Average"
           time_grain               = "PT1M"
           time_window              = "PT5M"
           threshold                = 70
-          dimensions               = []       # ✅ Empty list works for Terraform v3+
           divide_by_instance_count = false
         }
         scale_action = {
@@ -96,11 +96,11 @@ autoscale_profiles = {
           value     = "1"
           cooldown  = "PT5M"
         }
-      }
-
-      cpu_scale_in = {
+      },
+      {
         metric_trigger = {
           metric_name              = "CpuPercentage"
+          metric_resource_id       = autoscale_target_resource_id
           operator                 = "LessThan"
           statistic                = "Average"
           time_aggregation         = "Average"
@@ -116,11 +116,11 @@ autoscale_profiles = {
           cooldown  = "PT5M"
         }
       }
-    }
+    ]
 
     # Optional recurrence (weekly schedule)
     recurrence = {
-      timezone = "UTC"           # ✅ matches updated variables.tf
+      timezone = "UTC"
       days     = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
       hours    = [9, 12, 15]
       minutes  = [0]
@@ -130,7 +130,7 @@ autoscale_profiles = {
     fixed_date = {
       start    = "2025-12-01T00:00:00Z"
       end      = "2025-12-31T23:59:59Z"
-      timezone = "UTC"           # ✅ matches updated variables.tf
+      timezone = "UTC"
     }
   }
 }
@@ -144,6 +144,7 @@ autoscale_tags = {
   environment = "dev"
   owner       = "devops"
 }
+
 
 # ====================================
 # App Service Plan
