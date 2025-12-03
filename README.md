@@ -2,11 +2,11 @@
 
 This repository contains reusable Terraform modules for deploying Azure resources:
 
-- Redis Cache
-- CDN Profile
-- Disk Encryption Set
-- Autoscale Setting
 - app_service_plan
+- azure_cdn_frontdoor
+- azure_redis_cache
+- disk_encryption_set
+- terraform-avm-res-insights-autoscalesetting
 
 Modules are independent but can be orchestrated together through `main.tf`.
 
