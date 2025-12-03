@@ -1,5 +1,5 @@
 locals {
-  frontdoor_name = var.custom_name != "" ? var.custom_name : join("-", compact([var.name_prefix, var.client_name, var.environment, var.stack, var.name_suffix]))
+  frontdoor_name = var.frontdoor_custom_name != "" ? var.frontdoor_custom_name : join("-", compact([var.frontdoor_name_prefix, var.frontdoor_client_name, var.frontdoor_environment, var.frontdoor_stack, var.frontdoor_name_suffix]))
 }
 
 # --------------------------
@@ -7,12 +7,12 @@ locals {
 # --------------------------
 resource "azurerm_cdn_frontdoor_profile" "main" {
   name                = local.frontdoor_name
-  resource_group_name = var.resource_group_name
-  sku_name            = var.sku_name
-  tags                = var.extra_tags
+  resource_group_name = var.frontdoor_resource_group_name
+  sku_name            = var.frontdoor_sku_name
+  tags                = var.frontdoor_extra_tags
 
   identity {
-    type = lookup(var.identity, "type", "SystemAssigned")
+    type = lookup(var.frontdoor_identity, "type", "SystemAssigned")
   }
 }
 
@@ -20,7 +20,7 @@ resource "azurerm_cdn_frontdoor_profile" "main" {
 # Custom Domains
 # --------------------------
 resource "azurerm_cdn_frontdoor_custom_domain" "main" {
-  for_each                = { for cd in var.custom_domains : cd.name => cd }
+  for_each                = { for cd in var.frontdoor_custom_domains : cd.name => cd }
   name                    = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.main.id
   host_name               = each.value.host_name
@@ -36,7 +36,7 @@ resource "azurerm_cdn_frontdoor_custom_domain" "main" {
 # Endpoints
 # --------------------------
 resource "azurerm_cdn_frontdoor_endpoint" "main" {
-  for_each              = { for ep in var.endpoints : ep.name => ep }
+  for_each              = { for ep in var.frontdoor_endpoints : ep.name => ep }
   name                  = each.value.name
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.main.id
   enabled               = lookup(each.value, "enabled", true)
@@ -46,7 +46,7 @@ resource "azurerm_cdn_frontdoor_endpoint" "main" {
 # Origin Groups
 # --------------------------
 resource "azurerm_cdn_frontdoor_origin_group" "main" {
-  for_each = { for og in var.origin_groups : og.name => og }
+  for_each = { for og in var.frontdoor_origin_groups : og.name => og }
 
   name                         = each.value.name
   cdn_frontdoor_profile_id      = azurerm_cdn_frontdoor_profile.main.id
@@ -77,7 +77,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "main" {
 # Origins
 # --------------------------
 resource "azurerm_cdn_frontdoor_origin" "main" {
-  for_each = { for o in var.origins : o.name => o }
+  for_each = { for o in var.frontdoor_origins : o.name => o }
 
   name                           = each.value.name
   cdn_frontdoor_origin_group_id   = azurerm_cdn_frontdoor_origin_group.main[each.value.origin_group_name].id
@@ -94,7 +94,7 @@ resource "azurerm_cdn_frontdoor_origin" "main" {
 # Routes
 # --------------------------
 resource "azurerm_cdn_frontdoor_route" "main" {
-  for_each = { for r in var.routes : r.name => r }
+  for_each = { for r in var.frontdoor_routes : r.name => r }
 
   name                          = each.value.name
   cdn_frontdoor_origin_group_id  = azurerm_cdn_frontdoor_origin_group.main[each.value.origin_group_name].id
