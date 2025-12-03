@@ -5,6 +5,111 @@ subscription_id     = "DEV_SUBSCRIPTION_ID"
 resource_group_name = "dev-rg"
 
 # ====================================
+# App Service Plan
+# ====================================
+app_service_plan_location = "East US"
+app_service_plan_name     = "dev-appserviceplan"
+app_service_plan_size     = "B1"
+app_service_plan_os       = "Linux"
+
+app_service_plan_tags = {
+  environment = "dev"
+}
+
+
+# ====================================
+# Azure CDN Frontdoor
+# ====================================
+frontdoor_location            = "East US"
+frontdoor_name_prefix         = "adq"
+frontdoor_client_name         = "demo"
+frontdoor_environment         = "dev"
+frontdoor_stack               = "app"
+frontdoor_name_suffix         = "fd"
+frontdoor_custom_name         = ""
+
+frontdoor_extra_tags = {
+  project = "terraform-frontdoor"
+  env     = "dev"
+}
+
+frontdoor_custom_domains = [
+  {
+    name      = "frontend1"
+    host_name = "www.example.com"
+    tls = {
+      certificate_type    = "ManagedCertificate"
+      minimum_tls_version = "TLS12"
+    }
+  }
+]
+
+frontdoor_endpoints = [
+  { name = "frontend1-endpoint" }
+]
+
+frontdoor_origin_groups = [
+  {
+    name     = "backend-group-1"
+    origins  = [
+      { host_name = "app1.internal.cloud" },
+      { host_name = "app2.internal.cloud" }
+    ]
+    health_probe = {
+      interval_in_seconds = 30
+      path                = "/health"
+      protocol            = "Https"
+      request_type        = "GET"
+    }
+    load_balancing = {
+      additional_latency_in_milliseconds = 50
+      sample_size                        = 4
+      successful_samples_required        = 3
+    }
+    session_affinity_enabled = true
+    restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
+  }
+]
+
+frontdoor_origins = [
+  {
+    name              = "origin1"
+    origin_group_name = "backend-group-1"
+    host_name         = "app1.internal.cloud"
+    http_port         = 80
+    https_port        = 443
+    priority          = 1
+    weight            = 1
+    enabled           = true
+  },
+  {
+    name              = "origin2"
+    origin_group_name = "backend-group-1"
+    host_name         = "app2.internal.cloud"
+    http_port         = 80
+    https_port        = 443
+    priority          = 1
+    weight            = 1
+    enabled           = true
+  }
+]
+
+frontdoor_routes = [
+  {
+    name                   = "route1"
+    endpoint_name          = "frontend1-endpoint"
+    origin_group_name      = "backend-group-1"
+    forwarding_protocol    = "HttpsOnly"
+    origin_names      = ["origin1", "origin2"]
+    https_redirect_enabled = true
+    patterns_to_match      = ["/*"]
+    accepted_protocols     = ["Https"]
+    frontend_endpoints     = ["frontend1"]
+  }
+]
+
+
+# ====================================
 # Redis Cache Module Variables
 # ====================================
 redis_name          = "dev-redis-cache"
@@ -26,17 +131,6 @@ redis_tags = {
   environment = "dev"
 }
 
-# ====================================
-# CDN Profile Module Variables
-# ====================================
-cdn_profile_name    = "dev-cdn-profile"
-cdn_location        = "East US"
-cdn_pricing_tier    = "Standard_Microsoft"
-
-cdn_tags = {
-  environment = "dev"
-  department  = "IT"
-}
 
 # ====================================
 # Disk Encryption Set Module Variables
@@ -146,106 +240,3 @@ autoscale_tags = {
 }
 
 
-# ====================================
-# App Service Plan
-# ====================================
-app_service_plan_location = "East US"
-app_service_plan_name     = "dev-appserviceplan"
-app_service_plan_size     = "B1"
-app_service_plan_os       = "Linux"
-
-app_service_plan_tags = {
-  environment = "dev"
-}
-
-
-# ====================================
-# Azure CDN Frontdoor
-# ====================================
-frontdoor_location            = "East US"
-frontdoor_name_prefix         = "adq"
-frontdoor_client_name         = "demo"
-frontdoor_environment         = "dev"
-frontdoor_stack               = "app"
-frontdoor_name_suffix         = "fd"
-frontdoor_custom_name         = ""
-
-frontdoor_extra_tags = {
-  project = "terraform-frontdoor"
-  env     = "dev"
-}
-
-frontdoor_custom_domains = [
-  {
-    name      = "frontend1"
-    host_name = "www.example.com"
-    tls = {
-      certificate_type    = "ManagedCertificate"
-      minimum_tls_version = "TLS12"
-    }
-  }
-]
-
-frontdoor_endpoints = [
-  { name = "frontend1-endpoint" }
-]
-
-frontdoor_origin_groups = [
-  {
-    name     = "backend-group-1"
-    origins  = [
-      { host_name = "app1.internal.cloud" },
-      { host_name = "app2.internal.cloud" }
-    ]
-    health_probe = {
-      interval_in_seconds = 30
-      path                = "/health"
-      protocol            = "Https"
-      request_type        = "GET"
-    }
-    load_balancing = {
-      additional_latency_in_milliseconds = 50
-      sample_size                        = 4
-      successful_samples_required        = 3
-    }
-    session_affinity_enabled = true
-    restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 10
-  }
-]
-
-frontdoor_origins = [
-  {
-    name              = "origin1"
-    origin_group_name = "backend-group-1"
-    host_name         = "app1.internal.cloud"
-    http_port         = 80
-    https_port        = 443
-    priority          = 1
-    weight            = 1
-    enabled           = true
-  },
-  {
-    name              = "origin2"
-    origin_group_name = "backend-group-1"
-    host_name         = "app2.internal.cloud"
-    http_port         = 80
-    https_port        = 443
-    priority          = 1
-    weight            = 1
-    enabled           = true
-  }
-]
-
-frontdoor_routes = [
-  {
-    name                   = "route1"
-    endpoint_name          = "frontend1-endpoint"
-    origin_group_name      = "backend-group-1"
-    forwarding_protocol    = "HttpsOnly"
-    origin_names      = ["origin1", "origin2"]
-    https_redirect_enabled = true
-    patterns_to_match      = ["/*"]
-    accepted_protocols     = ["Https"]
-    frontend_endpoints     = ["frontend1"]
-  }
-]
