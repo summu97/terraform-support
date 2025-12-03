@@ -1,74 +1,252 @@
-# azurerm_frontdoor
+#  Azure Front Door (Standard/Premium) Terraform Module
 
-Terraform module to deploy an Azure CDN FrontDoor (Azure Front Door / CDN FrontDoor Profile) with origins, origin groups, endpoints, routes, custom domains, WAF/firewall policies, rule sets and diagnostics.
+This module deploys a full **Azure Front Door Standard/Premium** configuration including:
 
-## Features
-- Create FrontDoor profile with configurable SKU.
-- Add endpoints, origins, origin groups, routes and routes' cache/forwarding settings.
-- Create and configure custom domains (with TLS configuration).
-- Create firewall policies and security policies.
-- Wire diagnostic settings (use claranet/diagnostic-settings module).
-- Support for managed identities.
+* Front Door **Profile**
+* **Custom Domains**
+* **Endpoints**
+* **Origin Groups**
+* **Origins**
+* **Routes**
 
-## Requirements
-- Terraform >= 1.3
-- Providers:
-  - azurerm ~> 4.31
-  - azurecaf >= 1.2.28
+It supports simple setups as well as full enterprise-level traffic routing architectures.
 
-## Inputs
+The module is fully dynamic and allows you to define all components through variables, enabling **clean, scalable, multi-environment deployments**.
 
-**Required**
-- `client_name` (string)
-- `environment` (string)
-- `logs_destinations_ids` (list(string))
-- `resource_group_name` (string)
-- `stack` (string)
+---
 
-**Optional**
-- `custom_domains` (list(object)) — default `[]`
-- `custom_name` (string) — default `""`
-- `default_tags_enabled` (bool) — default `true`
-- `diagnostic_settings_custom_name` (string) — default `"default"`
-- `endpoints` (list(object)) — default `[]`
-- `firewall_policies` (list(object)) — default `[]`
-- `identity` (object) — default `{}`
-- `extra_tags` (map) — default `{}`
-- `name_prefix` / `name_suffix` (string) — default `""`
-- `origin_groups`, `origins`, `routes`, `rule_sets`, `security_policies`, etc.
+## 🌟 Features
 
-(See `variables.tf` for the full schema)
+### ✔️ 1. Automatic Naming
 
-## Outputs
-- `id` - FrontDoor profile id
-- `name` - FrontDoor profile name
-- `resource` - profile object
-- Maps for created resources: `resource_endpoint`, `resource_origin`, `resource_custom_domain`, etc.
+The module generates a clean resource name using this pattern:
 
-## Usage example
+```
+<prefix>-<client>-<environment>-<stack>-<suffix>
+```
+
+Or uses a fully custom name if provided.
+
+---
+
+### ✔️ 2. Front Door Profile Creation
+
+Creates an Azure Front Door Standard/Premium profile with optional identity:
+
+```hcl
+identity {
+  type = "SystemAssigned" | "UserAssigned"
+}
+```
+
+---
+
+### ✔️ 3. Custom Domains
+
+Supports unlimited domains:
+
+* `ManagedCertificate`
+* Custom certificates (`cdn_frontdoor_secret_id`)
+* TLS versions (default: `TLS12`)
+
+---
+
+### ✔️ 4. Endpoints
+
+Each endpoint can be individually enabled/disabled.
+
+---
+
+### ✔️ 5. Origin Groups
+
+Supports:
+
+* Session affinity
+* Health probes
+* Load balancing settings
+
+---
+
+### ✔️ 6. Origins
+
+Define all backends with:
+
+* hostname
+* http/https ports
+* weight
+* priority
+* origin group mapping
+
+---
+
+### ✔️ 7. Routes
+
+Supports:
+
+* Multi-origin routing
+* Path patterns
+* HTTPS redirect
+* Https-only forwarding
+* Endpoint-to-origin-group association
+
+---
+
+## 🧠 Architecture Diagram (Conceptual)
+
+```
+          ┌──────────────────────────┐
+          │   Front Door Profile     │
+          └──────────────┬───────────┘
+                         │
+     ┌───────────────────┼────────────────────┐
+     │                   │                    │
+┌─────────┐       ┌────────────┐        ┌────────────┐
+│Domains  │       │ Endpoints  │        │  Routes     │
+└────┬────┘       └──────┬─────┘        └──────┬─────┘
+     │                   │                    │
+     │             Maps to EP → OG → Origins  │
+     │                   │                    │
+┌────▼─────┐      ┌─────▼──────┐      ┌──────▼────────┐
+│ DNS Name │      │  Origin     │      │ Patterns, TLS │
+└──────────┘      │  Groups     │      └───────────────┘
+                  └──────┬──────┘
+                         │
+                      Origins
+```
+
+---
+
+## 📦 Module Structure Overview
+
+This module manages:
+
+| Component          | Terraform Resource                    |
+| ------------------ | ------------------------------------- |
+| **Profile**        | `azurerm_cdn_frontdoor_profile`       |
+| **Custom Domains** | `azurerm_cdn_frontdoor_custom_domain` |
+| **Endpoints**      | `azurerm_cdn_frontdoor_endpoint`      |
+| **Origin Groups**  | `azurerm_cdn_frontdoor_origin_group`  |
+| **Origins**        | `azurerm_cdn_frontdoor_origin`        |
+| **Routes**         | `azurerm_cdn_frontdoor_route`         |
+
+Everything is driven from variables—no resource duplication required.
+
+---
+
+## 🛠️ How to Use
+
+### **Example Usage**
+
 ```hcl
 module "frontdoor" {
-  source = "./modules/azurerm_frontdoor"
+  source = "./modules/frontdoor"
 
-  client_name          = "acme"
-  environment          = "prod"
-  stack                = "web"
-  resource_group_name  = "rg-frontdoor-prod"
-  logs_destinations_ids = [
-    azurerm_log_analytics_workspace.myworkspace.id
-  ]
+  resource_group_name = "rg-dev-apps"
 
-  custom_domains = [
+  frontdoor_name_prefix = "fd"
+  frontdoor_client_name = "app"
+  frontdoor_environment = "dev"
+  frontdoor_stack       = "web"
+
+  frontdoor_sku_name = "Standard_AzureFrontDoor"
+```
+
+### **Custom Domains Example**
+
+```hcl
+  frontdoor_custom_domains = [
     {
-      name      = "www-acme"
-      host_name = "www.acme.com"
+      name      = "mydomain"
+      host_name = "app.mydomain.com"
       tls = {
-        certificate_type = "ManagedCertificate"
+        certificate_type    = "ManagedCertificate"
+        minimum_tls_version = "TLS12"
       }
     }
   ]
+```
 
-  endpoints = [
-    { name = "frontdoor-endpoint-1" }
+### **Endpoints Example**
+
+```hcl
+  frontdoor_endpoints = [
+    {
+      name    = "app-endpoint"
+      enabled = true
+    }
+  ]
+```
+
+### **Origin Groups Example**
+
+```hcl
+  frontdoor_origin_groups = [
+    {
+      name = "app-og"
+      session_affinity_enabled = true
+      health_probe = {
+        interval_in_seconds = 30
+        path                = "/health"
+        protocol            = "Https"
+        request_type        = "GET"
+      }
+      load_balancing = {
+        sample_size = 4
+      }
+    }
+  ]
+```
+
+### **Origins Example**
+
+```hcl
+  frontdoor_origins = [
+    {
+      name              = "app-origin-1"
+      host_name         = "app-backend-1.azurewebsites.net"
+      origin_group_name = "app-og"
+      https_port        = 443
+    }
+  ]
+```
+
+### **Routes Example**
+
+```hcl
+  frontdoor_routes = [
+    {
+      name             = "app-route"
+      endpoint_name    = "app-endpoint"
+      origin_group_name = "app-og"
+      origin_names      = ["app-origin-1"]
+      patterns_to_match = ["/*"]
+    }
   ]
 }
+```
+
+---
+
+## 📘 Input Variables Summary
+
+| Variable Group | Description                                         |
+| -------------- | --------------------------------------------------- |
+| Naming         | Prefix, client, environment, stack, suffix          |
+| Profile        | SKU, identity, tags                                 |
+| Custom Domains | Hostname, TLS, certificate                          |
+| Endpoints      | Enabled flag                                        |
+| Origin Groups  | Health probe, load balancing, session affinity      |
+| Origins        | Hostname, ports, weight, priority                   |
+| Routes         | Mapping rules, protocols, redirects, route patterns |
+
+If you want, I can generate a full **variables.tf table** as well.
+
+---
+
+## 📝 Notes & Best Practices
+
+* Always ensure your **origin group name** in routes & origins matches exactly.
+* TLS10 is deprecated — the module defaults to **TLS12**.
+* One Front Door profile can host **multiple microservices** using different endpoints & paths.
+* Use `origin_names` to map multiple backend origins for failover or load balancing.
+
