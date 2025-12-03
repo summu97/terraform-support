@@ -7,7 +7,7 @@ locals {
 # --------------------------
 resource "azurerm_cdn_frontdoor_profile" "main" {
   name                = local.frontdoor_name
-  resource_group_name = var.frontdoor_resource_group_name
+  resource_group_name = var.resource_group_name
   sku_name            = var.frontdoor_sku_name
   tags                = var.frontdoor_extra_tags
 
