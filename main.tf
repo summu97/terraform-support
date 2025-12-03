@@ -1,4 +1,44 @@
 # -------------------------
+# app_service_plan
+# -------------------------
+
+module "app_service_plan" {
+  source = "./Modules/app_service_plan"
+
+  app_service_plan_name                  = var.app_service_plan_name
+  resource_group_name                    = var.resource_group_name
+  app_service_plan_location              = var.app_service_plan_location
+  app_service_plan_size                  = var.app_service_plan_size
+  app_service_plan_os                    = var.app_service_plan_os
+  app_service_plan_tags                  = var.app_service_plan_tags
+}
+
+# -------------------------
+# azure_cdn_frontdoor
+# -------------------------
+
+module "azure_cdn_frontdoor" {
+  source = "./Modules/azure_cdn_frontdoor"
+
+  resource_group_name               = var.resource_group_name
+  frontdoor_location                = var.frontdoor_location
+  frontdoor_custom_name             = var.frontdoor_custom_name
+  frontdoor_name_prefix             = var.frontdoor_name_prefix
+  frontdoor_client_name             = var.frontdoor_client_name
+  frontdoor_environment             = var.frontdoor_environment
+  frontdoor_stack                   = var.frontdoor_stack
+  frontdoor_name_suffix             = var.frontdoor_name_suffix
+  frontdoor_sku_name                = var.frontdoor_sku_name
+  frontdoor_extra_tags              = var.frontdoor_extra_tags
+  frontdoor_identity                = var.frontdoor_identity
+  frontdoor_custom_domains          = var.frontdoor_custom_domains
+  frontdoor_endpoints               = var.frontdoor_endpoints
+  frontdoor_origin_groups           = var.frontdoor_origin_groups
+  frontdoor_origins                 = var.frontdoor_origins
+  frontdoor_routes                  = var.frontdoor_routes
+}
+
+# -------------------------
 # Redis Cache Module
 # -------------------------
 module "azure_redis_cache" {
@@ -18,19 +58,6 @@ module "azure_redis_cache" {
   redis_rdb_storage_connection_string = var.redis_rdb_storage_connection_string
   redis_subnet_id                     = var.redis_subnet_id
   redis_tags                          = var.redis_tags
-}
-
-# -------------------------
-# CDN Profile Module
-# -------------------------
-module "cdn_profile" {
-  source = "./Modules/cdn_profile"
-
-  cdn_profile_name       = var.cdn_profile_name
-  resource_group_name    = var.resource_group_name
-  cdn_location           = var.cdn_location
-  cdn_pricing_tier       = var.cdn_pricing_tier
-  cdn_tags               = var.cdn_tags
 }
 
 # -------------------------
@@ -72,43 +99,4 @@ module "terraform-avm-res-insights-autoscalesetting" {
   autoscale_predictive         = var.autoscale_predictive
 }
 
-# -------------------------
-# app_service_plan
-# -------------------------
-
-module "app_service_plan" {
-  source = "./Modules/app_service_plan"
-
-  app_service_plan_name                  = var.app_service_plan_name
-  resource_group_name                    = var.resource_group_name
-  app_service_plan_location              = var.app_service_plan_location
-  app_service_plan_size                  = var.app_service_plan_size
-  app_service_plan_os                    = var.app_service_plan_os
-  app_service_plan_tags                  = var.app_service_plan_tags
-}
-
-# -------------------------
-# azure_cdn_frontdoor
-# -------------------------
-
-module "azure_cdn_frontdoor" {
-  source = "./Modules/azure_cdn_frontdoor"
-
-  resource_group_name               = var.resource_group_name
-  frontdoor_location                = var.frontdoor_location
-  frontdoor_custom_name             = var.frontdoor_custom_name
-  frontdoor_name_prefix             = var.frontdoor_name_prefix
-  frontdoor_client_name             = var.frontdoor_client_name
-  frontdoor_environment             = var.frontdoor_environment
-  frontdoor_stack                   = var.frontdoor_stack
-  frontdoor_name_suffix             = var.frontdoor_name_suffix
-  frontdoor_sku_name                = var.frontdoor_sku_name
-  frontdoor_extra_tags              = var.frontdoor_extra_tags
-  frontdoor_identity                = var.frontdoor_identity
-  frontdoor_custom_domains          = var.frontdoor_custom_domains
-  frontdoor_endpoints               = var.frontdoor_endpoints
-  frontdoor_origin_groups           = var.frontdoor_origin_groups
-  frontdoor_origins                 = var.frontdoor_origins
-  frontdoor_routes                  = var.frontdoor_routes
-}
 
