@@ -3,44 +3,44 @@ variable "resource_group_name" {
   description = "Name of the resource group"
 }
 
-variable "location" {
+variable "frontdoor_location" {
   type        = string
   description = "Azure location"
   default     = "East US"
 }
 
-variable "custom_name" {
+variable "frontdoor_custom_name" {
   type        = string
   description = "Custom name for the Front Door"
   default     = ""
 }
 
-variable "name_prefix" { type = string }
-variable "client_name" { type = string }
-variable "environment" { type = string }
-variable "stack" { type = string }
-variable "name_suffix" { type = string }
+variable "frontdoor_name_prefix" { type = string }
+variable "frontdoor_client_name" { type = string }
+variable "frontdoor_environment" { type = string }
+variable "frontdoor_stack" { type = string }
+variable "frontdoor_name_suffix" { type = string }
 
-variable "sku_name" {
+variable "frontdoor_sku_name" {
   type        = string
   description = "Front Door SKU (Standard_AzureFrontDoor or Premium_AzureFrontDoor)"
   default     = "Premium_AzureFrontDoor"
 }
 
-variable "extra_tags" {
+variable "frontdoor_extra_tags" {
   type        = map(string)
   description = "Tags to attach"
   default     = {}
 }
 
-variable "identity" {
+variable "frontdoor_identity" {
   type = map(any)
   default = {
     type = "SystemAssigned"
   }
 }
 
-variable "custom_domains" {
+variable "frontdoor_custom_domains" {
   type = list(object({
     name      = string
     host_name = string
@@ -65,7 +65,7 @@ variable "custom_domains" {
   }
 }
 
-variable "endpoints" {
+variable "frontdoor_endpoints" {
   type = list(object({
     name    = string
     enabled = optional(bool, true)
@@ -73,7 +73,7 @@ variable "endpoints" {
   default = []
 }
 
-variable "origin_groups" {
+variable "frontdoor_origin_groups" {
   type = list(object({
     name                                        = string
     session_affinity_enabled                    = optional(bool, true)
@@ -100,7 +100,7 @@ variable "origin_groups" {
   default = []
 }
 
-variable "origins" {
+variable "frontdoor_origins" {
   type = list(object({
     name                          = string
     origin_group_name             = string
@@ -115,7 +115,7 @@ variable "origins" {
   default = []
 }
 
-variable "routes" {
+variable "frontdoor_routes" {
   type = list(object({
     name                   = string
     endpoint_name          = string
