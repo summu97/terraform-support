@@ -13,11 +13,11 @@ output "frontdoor_frontdoor_profile" {
 }
 
 output "frontdoor_custom_domains" {
-  value = module.azure_cdn_frontdoor.
+  value = module.azure_cdn_frontdoor.custom_domains
 }
 
 output "frontdoor_endpoints" {
-  value = module.azure_cdn_frontdoor.custom_domains
+  value = module.azure_cdn_frontdoor.endpoints
 }
 
 output "frontdoor_origin_groups" {
