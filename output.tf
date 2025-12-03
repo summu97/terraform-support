@@ -69,10 +69,4 @@ output "autoscale_resource" {
   value = module.terraform-avm-res-insights-autoscalesetting.resource
 }
 
-# -------------------------
-# App Service Plan
-# -------------------------
-output "app_service_plan_id" {
-  value = module.app_service_plan.id
-}
 
