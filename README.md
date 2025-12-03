@@ -23,10 +23,10 @@ Modules are independent but can be orchestrated together through `main.tf`.
 
 ## How to Run Each Module Individually
 
-### 1. Redis Cache
+### 1. App Service Plan
 
 ```bash
 terraform init
-terraform plan -var-file="env/dev.tfvars" -target=module.azure_redis_cache
-terraform apply -var-file="env/dev.tfvars" -target=module.azure_redis_cache
+terraform plan -var-file="Environments/dev.tfvars" -target=module.app_service_plan 
+terraform apply -var-file="Environments/dev.tfvars" -target=module.app_service_plan 
 ```
