@@ -54,7 +54,7 @@ variable "frontdoor_custom_domains" {
 
   validation {
     condition = alltrue([
-      for d in var.custom_domains :
+      for d in var.frontdoor_custom_domains :
       (
         d.tls == {} ||
         lookup(d.tls, "minimum_tls_version", "TLS12") != "TLS10"
