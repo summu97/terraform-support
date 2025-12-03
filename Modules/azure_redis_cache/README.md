@@ -1,75 +1,163 @@
-# Azure Redis Cache Terraform Module
+#  Azure Redis Cache Terraform Module
 
-This Terraform module creates an **Azure Redis Cache** instance with support for Basic, Standard, and Premium tiers. It includes optional premium features like clustering, persistence, availability zones, and VNet integration.
+This Terraform module deploys an **Azure Redis Cache** instance and intelligently enables **Premium-tier features only when the selected SKU is Premium**.
 
----
+It works for all Redis SKUs:
 
-## Features
+* **Basic**
+* **Standard**
+* **Premium** (with advanced features)
 
-- Create Redis Cache in a specified resource group and region.
-- Supports multiple pricing tiers: `Basic`, `Standard`, `Premium`.
-- Premium tier enhancements:
-  - Availability Zones
-  - Sharding / Clustering
-  - Data persistence (RDB backups)
-  - Virtual Network integration
-- Apply custom tags for resource management.
+The module automatically handles feature availability based on the SKU, so the same module can be used for any environment.
 
 ---
 
-## Variables
+## ✅ **Features**
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| `redis_name` | DNS name for the Redis Cache | string | - |
-| `subscription_id` | Azure Subscription ID | string | - |
-| `resource_group_name` | Resource Group for Redis | string | - |
-| `location` | Azure Region | string | - |
-| `pricing_tier` | Redis pricing tier (`Basic`, `Standard`, `Premium`) | string | - |
-| `family` | Redis family type (`C` for Basic/Standard, `P` for Premium) | string | - |
-| `capacity` | Capacity SKU (0-6 depending on tier) | number | - |
-| `enable_non_ssl_port` | Enable non-SSL port | bool | false |
-| `zones` | Availability zones (Premium only) | list(string) | null |
-| `shard_count` | Enable clustering for Premium SKU | number | null |
-| `rdb_backup_enabled` | Enable RDB backups (Premium only) | bool | false |
-| `rdb_backup_frequency` | Frequency in minutes for RDB backups | number | null |
-| `rdb_storage_connection_string` | Storage connection string for RDB backups | string | null |
-| `subnet_id` | Subnet ID for VNet integration (Premium only) | string | null |
-| `tags` | Resource tags | map(string) | `{}` |
+### **Basic / Standard**
 
----
+* Deploys Redis Cache with:
 
-## Outputs
+  * Name
+  * Location
+  * Capacity
+  * Family (C, P, etc.)
+  * Tags
 
-| Name | Description |
-|------|-------------|
-| `redis_id` | ID of the Redis Cache instance |
-| `redis_hostname` | Hostname of the Redis Cache |
-| `redis_port` | Port used to connect to Redis |
+### **Premium-only Features (Auto-enabled when `redis_pricing_tier = "Premium"`):**
+
+1. **Availability Zones**
+2. **Clustering / Sharding (`shard_count`)**
+3. **Data Persistence (RDB):**
+
+   * `rdb_backup_enabled`
+   * `rdb_backup_frequency`
+   * `rdb_storage_connection_string`
+4. **VNet Integration using `subnet_id`**
+
+If a non-premium tier is selected, these features are **automatically disabled**.
 
 ---
 
-## Usage Example
+## 📌 **How It Works**
+
+This local variable determines if the selected SKU is Premium:
 
 ```hcl
-module "redis_cache" {
-  source              = "../modules/redis_cache"
-  redis_name          = "my-redis-cache"
-  resource_group_name = "rg-demo"
-  location            = "East US"
-  pricing_tier        = "Premium"
-  family              = "P"
-  capacity            = 1
-  enable_non_ssl_port = false
-  zones               = ["1", "2", "3"]
-  shard_count         = 2
-  rdb_backup_enabled  = true
-  rdb_backup_frequency = 60
-  rdb_storage_connection_string = "<storage-connection-string>"
-  subnet_id           = "<subnet-id>"
-  tags = {
-    environment = "dev"
-    project     = "terraform-demo"
+locals {
+  is_premium = var.redis_pricing_tier == "Premium"
+}
+```
+
+Premium-only arguments are applied conditionally:
+
+```hcl
+zones        = local.is_premium ? var.redis_zones : null
+shard_count  = local.is_premium ? var.redis_shard_count : null
+subnet_id    = local.is_premium ? var.redis_subnet_id : null
+```
+
+And dynamic persistence config:
+
+```hcl
+dynamic "redis_configuration" {
+  for_each = local.is_premium ? [1] : []
+  content {
+    rdb_backup_enabled            = var.redis_rdb_backup_enabled
+    rdb_backup_frequency          = var.redis_rdb_backup_frequency
+    rdb_storage_connection_string = var.redis_rdb_storage_connection_string
   }
 }
+```
+
+---
+
+## 📘 **Inputs**
+
+| Variable              | Type        | Description                | Required |
+| --------------------- | ----------- | -------------------------- | -------- |
+| `redis_name`          | string      | Redis Cache name           | Yes      |
+| `redis_location`      | string      | Azure region               | Yes      |
+| `resource_group_name` | string      | Resource group             | Yes      |
+| `redis_pricing_tier`  | string      | Basic / Standard / Premium | Yes      |
+| `redis_capacity`      | number      | Cache size (e.g., 1, 2, 3) | Yes      |
+| `redis_family`        | string      | Cache family (C/P)         | Yes      |
+| `redis_tags`          | map(string) | Resource tags              | No       |
+
+### **Premium-only Inputs**
+
+| Variable                              | Description                       |
+| ------------------------------------- | --------------------------------- |
+| `redis_zones`                         | Availability Zones                |
+| `redis_shard_count`                   | Number of shards                  |
+| `redis_rdb_backup_enabled`            | Enable RDB backups                |
+| `redis_rdb_backup_frequency`          | Backup frequency                  |
+| `redis_rdb_storage_connection_string` | Storage account connection string |
+| `redis_subnet_id`                     | Subnet for VNet injection         |
+
+> These are **ignored automatically** when using a non-premium tier.
+
+---
+
+## 🚀 **Example Usage**
+
+### **Standard Redis**
+
+```hcl
+module "redis" {
+  source = "./modules/redis"
+
+  redis_name           = "dev-redis"
+  redis_location       = "East US"
+  resource_group_name  = "rg-dev"
+  redis_pricing_tier   = "Standard"
+  redis_capacity       = 2
+  redis_family         = "C"
+
+  redis_tags = {
+    environment = "dev"
+  }
+}
+```
+
+### **Premium Redis (with clustering + RDB backups)**
+
+```hcl
+module "redis" {
+  source = "./modules/redis"
+
+  redis_name           = "prod-redis"
+  redis_location       = "East US"
+  resource_group_name  = "rg-prod"
+  redis_pricing_tier   = "Premium"
+  redis_capacity       = 3
+  redis_family         = "P"
+
+  redis_zones          = ["1", "2", "3"]
+  redis_shard_count    = 2
+  redis_subnet_id      = "/subscriptions/.../subnets/redis-subnet"
+
+  redis_rdb_backup_enabled            = true
+  redis_rdb_backup_frequency          = 60
+  redis_rdb_storage_connection_string = "DefaultEndpointsProtocol=https;AccountName=xxx;AccountKey=xxx;"
+
+  redis_tags = {
+    environment = "prod"
+  }
+}
+```
+
+---
+
+## 📝 **Notes**
+
+* Premium tier is required for:
+
+  * VNet integration
+  * Clustering
+  * RDB Persistence
+  * Zone redundancy
+* The module automatically prevents Terraform errors by disabling premium-only fields for non-premium SKUs.
+* The same module can be used across **Dev, QA, UAT, and Prod** with different `.tfvars`.
+
 
