@@ -94,11 +94,21 @@ module "app_service_plan" {
 module "azure_cdn_frontdoor" {
   source = "./Modules/azure_cdn_frontdoor"
 
-  app_service_plan_name                  = var.app_service_plan_name
-  resource_group_name                    = var.resource_group_name
-  app_service_plan_location              = var.app_service_plan_location
-  app_service_plan_size                  = var.app_service_plan_size
-  app_service_plan_os                    = var.app_service_plan_os
-  app_service_plan_tags                  = var.app_service_plan_tags
+  resource_group_name               = var.resource_group_name
+  frontdoor_location                = var.frontdoor_location
+  frontdoor_custom_name             = var.frontdoor_custom_name
+  frontdoor_name_prefix             = var.frontdoor_name_prefix
+  frontdoor_client_name             = var.frontdoor_client_name
+  frontdoor_environment             = var.frontdoor_environment
+  frontdoor_stack                   = var.frontdoor_stack
+  frontdoor_name_suffix             = var.frontdoor_name_suffix
+  frontdoor_sku_name                = var.frontdoor_sku_name
+  frontdoor_extra_tags              = var.frontdoor_extra_tags
+  frontdoor_identity                = var.frontdoor_identity
+  frontdoor_custom_domains          = var.frontdoor_custom_domains
+  frontdoor_endpoints               = var.frontdoor_endpoints
+  frontdoor_origin_groups           = var.frontdoor_origin_groups
+  frontdoor_origins                 = var.frontdoor_origins
+  frontdoor_routes                  = var.frontdoor_routes
 }
 
