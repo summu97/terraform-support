@@ -15,11 +15,6 @@ terraform {
       version = "~> 3.6"
     }
 
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
-
     azapi = {
       source  = "azure/azapi"
       # coming from your autoscale module
